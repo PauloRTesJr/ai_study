@@ -2,43 +2,43 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maximizando a Produtividade no Desenvolvimento de IA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
-        }
-        .content-section {
-            display: none;
-        }
-        .content-section.active {
-            display: block;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         .nav-link {
-            transition: all 0.3s ease;
+            transition: all 0.2s ease-in-out;
         }
         .nav-link.active, .nav-link:hover {
-            background-color: #FFF7ED; 
-            color: #EA580C; 
-            border-left: 4px solid #EA580C;
+            background-color: #0f172a; /* slate-900 */
+            color: #38bdf8; /* sky-400 */
+            border-left: 4px solid #38bdf8; /* sky-400 */
+            padding-left: calc(1rem - 4px); /* Adjust padding to account for border */
         }
         table th, table td {
-            padding: 0.75rem;
+            padding: 0.85rem 1rem;
             text-align: left;
-            border-bottom: 1px solid #FED7AA;
+            border-bottom: 1px solid #334155; /* slate-700 */
         }
         table th {
-            background-color: #FFEDD5;
-            color: #9A3412; 
+            background-color: #1e293b; /* slate-800 */
+            color: #7dd3fc; /* sky-300 */
+            font-weight: 600;
         }
-        table tr:hover {
-            background-color: #FFF7ED;
+        table tr:hover td { /* Hover on td to avoid affecting th */
+            background-color: #334155; /* slate-700 */
         }
         .accordion-button::after {
             content: ' ▼';
             font-size: 0.8em;
-            transition: transform 0.2s ease-in-out;
+            transition: transform 0.3s ease-in-out;
+            display: inline-block;
         }
         .accordion-button.open::after {
             transform: rotate(180deg);
@@ -46,44 +46,73 @@
         .accordion-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease-out;
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+            padding-top: 0;
+            padding-bottom: 0;
         }
         .accordion-content.open {
-            max-height: 1000px; /* Adjust as needed */
+            max-height: 1200px; 
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
         }
         .citation {
-            color: #F97316;
+            color: #f59e0b; /* amber-500 */
             font-weight: 500;
+        }
+        .content-section {
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            opacity: 0;
+            transform: translateY(15px);
+            will-change: opacity, transform;
+        }
+        .content-section.activated { /* Renamed from 'active' to avoid conflict with nav link styling */
+            opacity: 1;
+            transform: translateY(0);
+        }
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a; /* slate-900 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #38bdf8; /* sky-400 */
+            border-radius: 5px;
+            border: 2px solid #0f172a; /* slate-900 to create padding effect */
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0ea5e9; /* sky-500 */
         }
     </style>
 </head>
-<body class="bg-amber-50 text-neutral-800">
+<body class="bg-slate-900 text-slate-200">
     <div class="flex flex-col md:flex-row min-h-screen">
-        <nav id="sidebar" class="w-full md:w-72 bg-orange-50 p-6 shadow-lg md:sticky md:top-0 md:h-screen md:overflow-y-auto">
-            <h1 class="text-2xl font-bold text-orange-700 mb-8 border-b-2 border-orange-200 pb-4">Produtividade em IA</h1>
-            <ul class="space-y-2">
-                <li><a href="#fundamentos" class="nav-link block py-3 px-4 rounded-md text-neutral-700 font-medium">I. Fundamentos</a></li>
-                <li><a href="#cursor" class="nav-link block py-3 px-4 rounded-md text-neutral-700 font-medium">II. Dominando o Cursor</a></li>
-                <li><a href="#documentacao" class="nav-link block py-3 px-4 rounded-md text-neutral-700 font-medium">III. Documentação Estratégica</a></li>
-                <li><a href="#prompts" class="nav-link block py-3 px-4 rounded-md text-neutral-700 font-medium">IV. Engenharia de Prompts</a></li>
-                <li><a href="#ferramentas" class="nav-link block py-3 px-4 rounded-md text-neutral-700 font-medium">V. Expandindo Ferramentas</a></li>
-                <li><a href="#automacao" class="nav-link block py-3 px-4 rounded-md text-neutral-700 font-medium">VI. Automatizando Fluxos</a></li>
-                <li><a href="#conclusao" class="nav-link block py-3 px-4 rounded-md text-neutral-700 font-medium">VII. Conclusão</a></li>
+        <nav id="sidebar" class="w-full md:w-80 bg-slate-800 p-6 shadow-xl md:sticky md:top-0 md:h-screen md:overflow-y-auto">
+            <h1 class="text-3xl font-bold text-sky-400 mb-8 border-b-2 border-slate-700 pb-4">Produtividade em IA</h1>
+            <ul class="space-y-1">
+                <li><a href="#fundamentos" class="nav-link block py-3 px-4 rounded-md text-slate-300 hover:text-sky-400 font-medium">I. Fundamentos</a></li>
+                <li><a href="#cursor" class="nav-link block py-3 px-4 rounded-md text-slate-300 hover:text-sky-400 font-medium">II. Dominando o Cursor</a></li>
+                <li><a href="#documentacao" class="nav-link block py-3 px-4 rounded-md text-slate-300 hover:text-sky-400 font-medium">III. Documentação Estratégica</a></li>
+                <li><a href="#prompts" class="nav-link block py-3 px-4 rounded-md text-slate-300 hover:text-sky-400 font-medium">IV. Engenharia de Prompts</a></li>
+                <li><a href="#ferramentas" class="nav-link block py-3 px-4 rounded-md text-slate-300 hover:text-sky-400 font-medium">V. Expandindo Ferramentas</a></li>
+                <li><a href="#automacao" class="nav-link block py-3 px-4 rounded-md text-slate-300 hover:text-sky-400 font-medium">VI. Automatizando Fluxos</a></li>
+                <li><a href="#conclusao" class="nav-link block py-3 px-4 rounded-md text-slate-300 hover:text-sky-400 font-medium">VII. Conclusão</a></li>
             </ul>
         </nav>
 
-        <main class="flex-1 p-6 md:p-10 bg-white">
+        <main class="flex-1 p-6 md:p-10 relative"> {/* Added relative for positioning child sections */}
             <header class="mb-10">
-                <h2 id="main-title" class="text-4xl font-bold text-orange-600">Maximizando a Produtividade no Desenvolvimento de IA</h2>
+                <h2 id="main-title" class="text-4xl md:text-5xl font-bold text-sky-400">Maximizando a Produtividade no Desenvolvimento de IA</h2>
             </header>
 
-            <section id="fundamentos" class="content-section space-y-6">
-                <h3 class="text-3xl font-semibold text-orange-500 mb-6 border-b border-orange-200 pb-3">I. Fundamentos de um Ambiente de Desenvolvimento de IA Produtivo</h3>
-                <p class="text-lg leading-relaxed text-neutral-700">Esta seção explora os pilares essenciais para construir um ambiente de desenvolvimento de Inteligência Artificial que seja verdadeiramente produtivo. Abordaremos desde os princípios fundamentais que orientam a colaboração homem-máquina até os componentes críticos da infraestrutura, como hardware, gestão de dependências e controle de versão. Compreender e implementar corretamente estes fundamentos é o primeiro passo para otimizar o ciclo de vida do desenvolvimento de IA.</p>
+            <section id="fundamentos" class="content-section space-y-8">
+                <h3 class="text-3xl font-semibold text-sky-400 mb-6 border-b border-slate-700 pb-3">I. Fundamentos de um Ambiente de Desenvolvimento de IA Produtivo</h3>
+                <p class="text-lg leading-relaxed text-slate-300">Esta seção explora os pilares essenciais para construir um ambiente de desenvolvimento de Inteligência Artificial que seja verdadeiramente produtivo. Abordaremos desde os princípios fundamentais que orientam a colaboração homem-máquina até os componentes críticos da infraestrutura, como hardware, gestão de dependências e controle de versão. Compreender e implementar corretamente estes fundamentos é o primeiro passo para otimizar o ciclo de vida do desenvolvimento de IA.</p>
                 
-                <div class="bg-amber-50 p-6 rounded-lg shadow">
-                    <h4 class="text-2xl font-semibold text-orange-600 mb-4">A. Princípios Fundamentais para a Produtividade no Desenvolvimento Assistido por IA</h4>
-                    <ul class="list-disc list-inside space-y-3 text-neutral-700">
+                <div class="bg-slate-800 p-6 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-semibold text-sky-300 mb-4">A. Princípios Fundamentais para a Produtividade no Desenvolvimento Assistido por IA</h4>
+                    <ul class="list-disc list-inside space-y-3 text-slate-300 pl-2">
                         <li><strong>O Papel em Evolução do Programador:</strong> Transição de gerador de código para colaborador, engenheiro de prompts e avaliador crítico. A IA é um assistente, não um substituto. <span class="citation">[1, 2]</span></li>
                         <li><strong>Fluência em IA como Competência Crítica:</strong> Capacidade de interagir eficazmente com IA, formular prompts e refinar resultados é mais crucial que a escolha do editor. <span class="citation">[2]</span></li>
                         <li><strong>Desenvolvimento Iterativo com IA:</strong> Ciclo de "Construir, Rever, Melhorar – Repetir" para integrar código gerado por IA. <span class="citation">[1]</span></li>
@@ -91,95 +120,113 @@
                     </ul>
                 </div>
 
-                <div class="bg-amber-50 p-6 rounded-lg shadow">
-                    <h4 class="text-2xl font-semibold text-orange-600 mb-4">B. Componentes Essenciais da Infraestrutura</h4>
-                    <p class="mb-4 text-neutral-700">A infraestrutura correta é vital. Discutimos requisitos de hardware, estratégias de gestão de dependências e melhores práticas de controle de versão.</p>
+                <div class="bg-slate-800 p-6 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-semibold text-sky-300 mb-4">B. Componentes Essenciais da Infraestrutura</h4>
+                    <p class="mb-4 text-slate-300">A infraestrutura correta é vital. Discutimos requisitos de hardware, estratégias de gestão de dependências e melhores práticas de controle de versão.</p>
                     
-                    <h5 class="text-xl font-semibold text-orange-500 my-3">1. Requisitos de Hardware para Cargas de Trabalho de IA</h5>
-                    <p class="text-neutral-700">CPU, GPU, RAM e armazenamento (SSDs NVMe) são cruciais. Hardware bem dimensionado previne estrangulamentos e acelera ciclos de treino/inferência. <span class="citation">[5, 6]</span></p>
-
-                    <h5 class="text-xl font-semibold text-orange-500 my-3">2. Estratégias de Gestão de Dependências e Ambientes</h5>
-                    <p class="text-neutral-700 mb-4">Ferramentas como Miniconda, Poetry, Pipenv e Docker são essenciais para reprodutibilidade e evitar conflitos. <span class="citation">[7, 8]</span></p>
-                    <div class="overflow-x-auto rounded-lg shadow-md">
-                        <table class="min-w-full bg-white">
-                            <thead>
-                                <tr>
-                                    <th>Ferramenta</th>
-                                    <th>Funcionalidades Chave</th>
-                                    <th>Gestão de Pacotes</th>
-                                    <th>Gestão de Ambiente</th>
-                                    <th>Caso de Uso Ideal</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Miniconda</td>
-                                    <td>Leve, suporte Conda completo</td>
-                                    <td>Conda</td>
-                                    <td>Ambientes Conda</td>
-                                    <td>Programadores que querem Conda sem o volume do Anaconda</td>
-                                </tr>
-                                <tr>
-                                    <td>Poetry</td>
-                                    <td>Gestão moderna, compilações reprodutíveis</td>
-                                    <td>Poetry</td>
-                                    <td>Poetry virtualenv</td>
-                                    <td>Projetos de IA limpos com controlo preciso de dependências</td>
-                                </tr>
-                                <tr>
-                                    <td>Pipenv</td>
-                                    <td>Combina pip e virtualenv, bloqueio de dependências</td>
-                                    <td>Pip</td>
-                                    <td>Pipenv virtualenv</td>
-                                    <td>Projetos Python simples</td>
-                                </tr>
-                                <tr>
-                                    <td>Docker</td>
-                                    <td>Containerização, consistência, suporte GPU</td>
-                                    <td>N/A (container)</td>
-                                    <td>Isolamento de container</td>
-                                    <td>Configurações de IA de nível de produção, dependências complexas</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="accordion-item mb-4">
+                        <button class="accordion-button bg-slate-700 hover:bg-slate-600 text-sky-300 font-semibold py-3 px-4 rounded-md w-full text-left flex justify-between items-center transition-colors duration-200">
+                            1. Requisitos de Hardware para Cargas de Trabalho de IA
+                        </button>
+                        <div class="accordion-content bg-slate-700/50 rounded-b-md px-4 text-slate-300">
+                            <p>CPU, GPU, RAM e armazenamento (SSDs NVMe) são cruciais. Hardware bem dimensionado previne estrangulamentos e acelera ciclos de treino/inferência. <span class="citation">[5, 6]</span> GPUs como NVIDIA (com CUDA) ou AMD (com ROCm) são especialmente importantes para deep learning devido ao seu paralelismo massivo. A RAM deve ser suficiente para os datasets e modelos, e o armazenamento rápido agiliza o carregamento de dados.</p>
+                        </div>
                     </div>
-                     <p class="text-sm text-neutral-600 mt-2">Fontes: <span class="citation">[7, 8]</span></p>
 
-                    <h5 class="text-xl font-semibold text-orange-500 my-3">3. Melhores Práticas de Controlo de Versão para Código, Dados e Modelos</h5>
-                    <p class="text-neutral-700">Git para código, e DVC (Data Version Control) para versionar dados e modelos de ML, armazenando ficheiros grandes externamente. <span class="citation">[9, 10]</span></p>
+                    <div class="accordion-item mb-4">
+                        <button class="accordion-button bg-slate-700 hover:bg-slate-600 text-sky-300 font-semibold py-3 px-4 rounded-md w-full text-left flex justify-between items-center transition-colors duration-200">
+                           2. Estratégias de Gestão de Dependências e Ambientes
+                        </button>
+                        <div class="accordion-content bg-slate-700/50 rounded-b-md px-4 text-slate-300">
+                            <p class="mb-4">Ferramentas como Miniconda, Poetry, Pipenv e Docker são essenciais para reprodutibilidade e evitar conflitos. <span class="citation">[7, 8]</span></p>
+                            <div class="overflow-x-auto rounded-lg shadow-md">
+                                <table class="min-w-full">
+                                    <thead>
+                                        <tr>
+                                            <th>Ferramenta</th>
+                                            <th>Funcionalidades Chave</th>
+                                            <th>Gestão de Pacotes</th>
+                                            <th>Gestão de Ambiente</th>
+                                            <th>Caso de Uso Ideal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-slate-300">
+                                        <tr>
+                                            <td>Miniconda</td>
+                                            <td>Leve, suporte Conda completo</td>
+                                            <td>Conda</td>
+                                            <td>Ambientes Conda</td>
+                                            <td>Programadores que querem Conda sem o volume do Anaconda</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Poetry</td>
+                                            <td>Gestão moderna, compilações reprodutíveis</td>
+                                            <td>Poetry</td>
+                                            <td>Poetry virtualenv</td>
+                                            <td>Projetos de IA limpos com controlo preciso de dependências</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Pipenv</td>
+                                            <td>Combina pip e virtualenv, bloqueio de dependências</td>
+                                            <td>Pip</td>
+                                            <td>Pipenv virtualenv</td>
+                                            <td>Projetos Python simples</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Docker</td>
+                                            <td>Containerização, consistência, suporte GPU</td>
+                                            <td>N/A (container)</td>
+                                            <td>Isolamento de container</td>
+                                            <td>Configurações de IA de nível de produção, dependências complexas</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="text-sm text-slate-400 mt-2">Fontes: <span class="citation">[7, 8]</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <button class="accordion-button bg-slate-700 hover:bg-slate-600 text-sky-300 font-semibold py-3 px-4 rounded-md w-full text-left flex justify-between items-center transition-colors duration-200">
+                            3. Melhores Práticas de Controlo de Versão
+                        </button>
+                         <div class="accordion-content bg-slate-700/50 rounded-b-md px-4 text-slate-300">
+                            <p>Git para código, e DVC (Data Version Control) para versionar dados e modelos de ML, armazenando ficheiros grandes externamente. <span class="citation">[9, 10]</span> DVC integra-se com Git para rastrear metadados, enquanto os dados reais residem em armazenamento remoto (S3, GCS, etc.), mantendo o repositório Git leve.</p>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <section id="cursor" class="content-section space-y-6">
-                <h3 class="text-3xl font-semibold text-orange-500 mb-6 border-b border-orange-200 pb-3">II. Dominando o IDE Alimentado por IA: Um Mergulho Profundo no Cursor</h3>
-                <p class="text-lg leading-relaxed text-neutral-700">O Cursor é um editor de código "AI-first" construído sobre o VS Code, projetado para otimizar a interação programador-máquina. Esta seção detalha suas funcionalidades chave, como instalação, configuração e, mais importante, como maximizar a produtividade através de suas capacidades de IA, incluindo assistência contextual, geração de código, refatorização, depuração e fluxos de trabalho avançados com o Modo Agent. Também exploramos a personalização via Regras do Cursor e MCP, e comparamos o Cursor com o VS Code + GitHub Copilot.</p>
+            <section id="cursor" class="content-section space-y-8">
+                <h3 class="text-3xl font-semibold text-sky-400 mb-6 border-b border-slate-700 pb-3">II. Dominando o IDE Alimentado por IA: Um Mergulho Profundo no Cursor</h3>
+                <p class="text-lg leading-relaxed text-slate-300">O Cursor é um editor de código "AI-first" construído sobre o VS Code, projetado para otimizar a interação programador-máquina. Esta seção detalha suas funcionalidades chave, como instalação, configuração e, mais importante, como maximizar a produtividade através de suas capacidades de IA, incluindo assistência contextual, geração de código, refatorização, depuração e fluxos de trabalho avançados com o Modo Agent. Também exploramos a personalização via Regras do Cursor e MCP, e comparamos o Cursor com o VS Code + GitHub Copilot.</p>
                 
-                <div class="bg-amber-50 p-6 rounded-lg shadow">
-                     <h4 class="text-2xl font-semibold text-orange-600 mb-4">A. Introdução ao Cursor</h4>
-                     <p class="text-neutral-700 mb-2">Funcionalidades centrais: Tab (com modelo Fusion para previsões de código e "saltos" inteligentes), Agent (programador par de IA para tarefas complexas multificheiro) e Cmd-K (edição inline rápida). <span class="citation">[12, 14, 15, 16, 17]</span></p>
-                     <p class="text-neutral-700">Instalação simples e importação de configurações do VS Code. <span class="citation">[12, 18]</span></p>
+                <div class="bg-slate-800 p-6 rounded-lg shadow-md">
+                     <h4 class="text-2xl font-semibold text-sky-300 mb-4">A. Introdução ao Cursor</h4>
+                     <p class="text-slate-300 mb-2">Funcionalidades centrais: Tab (com modelo Fusion para previsões de código e "saltos" inteligentes), Agent (programador par de IA para tarefas complexas multificheiro) e Cmd-K (edição inline rápida). <span class="citation">[12, 14, 15, 16, 17]</span></p>
+                     <p class="text-slate-300">Instalação simples e importação de configurações do VS Code. <span class="citation">[12, 18]</span> O Cursor visa uma experiência de codificação onde a IA é um parceiro integral, não apenas um complemento.</p>
                 </div>
 
-                <div class="bg-amber-50 p-6 rounded-lg shadow">
-                    <h4 class="text-2xl font-semibold text-orange-600 mb-4">B. Maximizando a Produtividade com IA no Cursor</h4>
-                    <ul class="list-disc list-inside space-y-3 text-neutral-700">
-                        <li><strong>Assistência de Código Consciente do Contexto:</strong> Compreensão da base de código inteira, uso de @-símbolos (`@Files`, `@Folders`, etc.) para contexto específico, indexação da base de código. <span class="citation">[19, 20, 21]</span></li>
-                        <li><strong>Geração, Refatorização e Depuração:</strong> Geração de código a partir de prompts, assistência à refatorização multificheiro, deteção de erros e sugestão de correções, análise de logs. <span class="citation">[13, 16, 19, 22]</span></li>
-                        <li><strong>Fluxos de Trabalho Avançados com Modo Agent:</strong> Operação autónoma para explorar a base de código, planear e executar alterações. Modo YOLO para TDD assistido por IA. <span class="citation">[16, 17, 22]</span></li>
+                <div class="bg-slate-800 p-6 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-semibold text-sky-300 mb-4">B. Maximizando a Produtividade com IA no Cursor</h4>
+                    <ul class="list-disc list-inside space-y-3 text-slate-300 pl-2">
+                        <li><strong>Assistência de Código Consciente do Contexto:</strong> Compreensão da base de código inteira, uso de @-símbolos (`@Files`, `@Folders`, `@Code`, `@Docs`, etc.) para contexto específico, indexação da base de código para sugestões mais relevantes. <span class="citation">[19, 20, 21]</span></li>
+                        <li><strong>Geração, Refatorização e Depuração:</strong> Geração de código a partir de prompts em linguagem natural, assistência à refatorização multificheiro, deteção de erros e sugestão de correções, análise de logs e explicação de bugs. <span class="citation">[13, 16, 19, 22]</span></li>
+                        <li><strong>Fluxos de Trabalho Avançados com Modo Agent:</strong> Operação autónoma para explorar a base de código, planear e executar alterações complexas. Modo YOLO (You Only Look Once) permite ao Agent executar comandos no terminal (testes, builds) e iterar até o sucesso. <span class="citation">[16, 17, 22]</span></li>
                     </ul>
                 </div>
 
-                <div class="bg-amber-50 p-6 rounded-lg shadow">
-                    <h4 class="text-2xl font-semibold text-orange-600 mb-4">C. Personalizando e Estendendo o Cursor</h4>
-                     <p class="text-neutral-700 mb-2"><strong>Regras do Cursor:</strong> Orientação persistente para IA (nível de projeto ou utilizador) via ficheiros `.mdc`. <span class="citation">[23, 24]</span></p>
-                     <p class="text-neutral-700"><strong>Model Context Protocol (MCP) Servers:</strong> Conecta o Cursor a sistemas externos (bases de dados, APIs, etc.) para expandir capacidades do Agent. <span class="citation">[18, 25]</span></p>
+                <div class="bg-slate-800 p-6 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-semibold text-sky-300 mb-4">C. Personalizando e Estendendo o Cursor</h4>
+                     <p class="text-slate-300 mb-2"><strong>Regras do Cursor:</strong> Fornecem orientação persistente e reutilizável para a IA (a nível de projeto em `.cursor/rules` ou a nível de utilizador nas configurações) através de ficheiros `.mdc` (Markdown Components). Tipos de regras incluem `Always`, `Auto Attached`, `Agent Requested` e `Manual`. <span class="citation">[23, 24]</span></p>
+                     <p class="text-slate-300"><strong>Model Context Protocol (MCP) Servers:</strong> Um protocolo aberto que permite ao Cursor conectar-se a fontes de dados e ferramentas externas (bases de dados, APIs, outras LLMs via OpenRouter), expandindo as capacidades do Agent e permitindo a criação de fluxos de trabalho personalizados. <span class="citation">[18, 25]</span></p>
                 </div>
                 
-                <div class="bg-amber-50 p-6 rounded-lg shadow">
-                    <h4 class="text-2xl font-semibold text-orange-600 mb-4">D. O Cursor no Panorama dos IDEs de IA</h4>
-                    <p class="text-neutral-700 mb-4">Comparação entre Cursor e VS Code com GitHub Copilot, destacando diferenças em consciência de contexto, colaboração e controle de modelos.</p>
+                <div class="bg-slate-800 p-6 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-semibold text-sky-300 mb-4">D. O Cursor no Panorama dos IDEs de IA</h4>
+                    <p class="text-slate-300 mb-4">Comparação entre Cursor e VS Code com GitHub Copilot, destacando diferenças em consciência de contexto, colaboração e controle de modelos.</p>
                     <div class="overflow-x-auto rounded-lg shadow-md">
-                        <table class="min-w-full bg-white">
+                        <table class="min-w-full">
                             <thead>
                                 <tr>
                                     <th>Funcionalidade</th>
@@ -187,7 +234,7 @@
                                     <th>VS Code com GitHub Copilot</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="text-slate-300">
                                 <tr>
                                     <td>Tipo de Integração de IA</td>
                                     <td>IDE AI-first, nativamente integrado</td>
@@ -196,12 +243,12 @@
                                 <tr>
                                     <td>Consciência de Contexto Projeto</td>
                                     <td>Elevada; compreende a base de código completa</td>
-                                    <td>Limitada principalmente ao ficheiro ativo</td>
+                                    <td>Limitada principalmente ao ficheiro ativo (melhorando)</td>
                                 </tr>
                                 <tr>
                                     <td>Edições Multificheiro</td>
-                                    <td>Forte, facilitado pelo Agent</td>
-                                    <td>Menos direto</td>
+                                    <td>Forte, facilitado pelo Agent e Chat</td>
+                                    <td>Menos direto, chat do Copilot ajuda</td>
                                 </tr>
                                  <tr>
                                     <td>Colaboração com IA</td>
@@ -211,79 +258,112 @@
                                 <tr>
                                     <td>Controlo de Modelos de IA</td>
                                     <td>Permite seleção de modelos, chaves de API próprias</td>
-                                    <td>Utiliza o backend da GitHub</td>
+                                    <td>Utiliza o backend da GitHub, menos controlo direto</td>
                                 </tr>
                                 <tr>
                                     <td>Força Principal</td>
-                                    <td>Assistência de IA profunda e personalizável</td>
-                                    <td>Assistência inline rápida e simplificada</td>
+                                    <td>Assistência de IA profunda, personalizável e proativa</td>
+                                    <td>Assistência inline rápida e simplificada, bem integrada</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <p class="text-sm text-neutral-600 mt-2">Fontes: <span class="citation">[20, 26]</span></p>
+                    <p class="text-sm text-slate-400 mt-2">Fontes: <span class="citation">[20, 26]</span></p>
                 </div>
             </section>
 
-            <section id="documentacao" class="content-section space-y-6">
-                <h3 class="text-3xl font-semibold text-orange-500 mb-6 border-b border-orange-200 pb-3">III. Documentação Estratégica em Projetos de IA</h3>
-                <p class="text-lg leading-relaxed text-neutral-700">A documentação em projetos de IA é ainda mais crítica do que no desenvolvimento tradicional. Ela é fundamental para a produtividade, colaboração, reprodutibilidade e responsabilidade, especialmente considerando a complexidade e as implicações éticas da IA. Esta seção aborda o papel da documentação, melhores práticas para documentar todos os aspetos de um projeto de IA/ML (desde o projeto em si até dados, modelos, código e utilizadores) e como a própria IA pode ser alavancada para tornar o processo de documentação mais eficiente.</p>
+            <section id="documentacao" class="content-section space-y-8">
+                <h3 class="text-3xl font-semibold text-sky-400 mb-6 border-b border-slate-700 pb-3">III. Documentação Estratégica em Projetos de IA</h3>
+                <p class="text-lg leading-relaxed text-slate-300">A documentação em projetos de IA é ainda mais crítica do que no desenvolvimento tradicional. Ela é fundamental para a produtividade, colaboração, reprodutibilidade e responsabilidade, especialmente considerando a complexidade e as implicações éticas da IA. Esta seção aborda o papel da documentação, melhores práticas para documentar todos os aspetos de um projeto de IA/ML (desde o projeto em si até dados, modelos, código e utilizadores) e como a própria IA pode ser alavancada para tornar o processo de documentação mais eficiente.</p>
 
-                <div class="bg-amber-50 p-6 rounded-lg shadow">
-                    <h4 class="text-2xl font-semibold text-orange-600 mb-4">A. O Papel da Documentação no Aumento da Produtividade</h4>
-                    <p class="text-neutral-700">Melhora clareza, facilita colaboração, acelera onboarding, simplifica manutenção e é crucial para reprodutibilidade e gestão de riscos. <span class="citation">[1, 28, 29, 30]</span></p>
+                <div class="bg-slate-800 p-6 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-semibold text-sky-300 mb-4">A. O Papel da Documentação no Aumento da Produtividade</h4>
+                    <p class="text-slate-300">A documentação clara e abrangente melhora a compreensão do projeto, facilita a colaboração entre equipas multidisciplinares, acelera o onboarding de novos membros, simplifica a manutenção e a depuração, e é crucial para a reprodutibilidade de experiências e a gestão de riscos. <span class="citation">[1, 28, 29, 30]</span></p>
                 </div>
 
-                <div class="bg-amber-50 p-6 rounded-lg shadow">
-                    <h4 class="text-2xl font-semibold text-orange-600 mb-4">B. Melhores Práticas para Documentar Projetos de IA/ML</h4>
-                    <ul class="list-disc list-inside space-y-3 text-neutral-700">
-                        <li><strong>Documentação do Projeto:</strong> Objetivos, métricas, análise custo-benefício, plano do projeto, Data Science Design Document, User Stories. <span class="citation">[28]</span></li>
-                        <li><strong>Documentação dos Dados:</strong> Fontes, seleção, características, problemas conhecidos, localização, atualização, conformidade. <span class="citation">[28, 29]</span></li>
-                        <li><strong>Documentação do Modelo:</strong> Design experimental, algoritmos, drivers, Model Cards. <span class="citation">[28]</span></li>
-                        <li><strong>Documentação do Código e da Infraestrutura:</strong> Comentários, READMEs, wikis, cadência de retreino, SLAs, runbooks. <span class="citation">[28]</span></li>
-                        <li><strong>Documentação do Utilizador:</strong> Guias de UI/API, definições, parâmetros. <span class="citation">[28]</span></li>
-                    </ul>
+                <div class="bg-slate-800 p-6 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-semibold text-sky-300 mb-4">B. Melhores Práticas para Documentar Projetos de IA/ML</h4>
+                     <div class="accordion-item mb-2">
+                        <button class="accordion-button bg-slate-700 hover:bg-slate-600 text-amber-400 font-semibold py-2 px-3 rounded-md w-full text-left flex justify-between items-center transition-colors duration-200">
+                            Documentação do Projeto
+                        </button>
+                        <div class="accordion-content bg-slate-700/50 rounded-b-md px-3 text-slate-300">
+                           <p>Inclui objetivos de negócio, métricas de avaliação, análise custo-benefício, plano do projeto (recursos, marcos, orçamento, riscos), Data Science Design Document e User Stories detalhadas. <span class="citation">[28]</span></p>
+                        </div>
+                    </div>
+                     <div class="accordion-item mb-2">
+                        <button class="accordion-button bg-slate-700 hover:bg-slate-600 text-amber-400 font-semibold py-2 px-3 rounded-md w-full text-left flex justify-between items-center transition-colors duration-200">
+                            Documentação dos Dados
+                        </button>
+                        <div class="accordion-content bg-slate-700/50 rounded-b-md px-3 text-slate-300">
+                           <p>Fontes de dados, critérios de seleção, características estatísticas, problemas conhecidos, transformações aplicadas, localização, frequência de atualização e conformidade com privacidade/regulações. <span class="citation">[28, 29]</span></p>
+                        </div>
+                    </div>
+                     <div class="accordion-item mb-2">
+                        <button class="accordion-button bg-slate-700 hover:bg-slate-600 text-amber-400 font-semibold py-2 px-3 rounded-md w-full text-left flex justify-between items-center transition-colors duration-200">
+                            Documentação do Modelo
+                        </button>
+                        <div class="accordion-content bg-slate-700/50 rounded-b-md px-3 text-slate-300">
+                           <p>Design experimental (hipóteses, variáveis, validação), algoritmos utilizados (e os descartados), hiperparâmetros, drivers do modelo e Model Cards para transparência. <span class="citation">[28]</span></p>
+                        </div>
+                    </div>
+                     <div class="accordion-item mb-2">
+                        <button class="accordion-button bg-slate-700 hover:bg-slate-600 text-amber-400 font-semibold py-2 px-3 rounded-md w-full text-left flex justify-between items-center transition-colors duration-200">
+                            Documentação do Código e Infraestrutura
+                        </button>
+                        <div class="accordion-content bg-slate-700/50 rounded-b-md px-3 text-slate-300">
+                           <p>Comentários no código, READMEs, wikis, documentação da arquitetura da infraestrutura, cadência de retreino de modelos, Service Level Agreements (SLAs) e runbooks para manutenção. <span class="citation">[28]</span></p>
+                        </div>
+                    </div>
+                     <div class="accordion-item">
+                        <button class="accordion-button bg-slate-700 hover:bg-slate-600 text-amber-400 font-semibold py-2 px-3 rounded-md w-full text-left flex justify-between items-center transition-colors duration-200">
+                            Documentação do Utilizador
+                        </button>
+                        <div class="accordion-content bg-slate-700/50 rounded-b-md px-3 text-slate-300">
+                           <p>Guias para utilizadores finais de interfaces de UI, e documentação técnica para APIs (endpoints, parâmetros, formatos de dados, exemplos de resposta). <span class="citation">[28]</span></p>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="bg-amber-50 p-6 rounded-lg shadow">
-                    <h4 class="text-2xl font-semibold text-orange-600 mb-4">C. Alavancando a IA para Documentação Eficiente</h4>
-                     <p class="text-neutral-700 mb-2">A IA pode gerar rascunhos de documentação, sumarizar informações, melhorar clareza e ajudar na manutenção. <span class="citation">[11, 19, 30, 31, 32, 33, 34]</span></p>
-                     <p class="text-neutral-700">Ferramentas como Mintlify, GitHub Copilot, Tabnine Docs, DocuWriter.ai e o próprio Cursor auxiliam neste processo. <span class="citation">[11, 19, 31]</span></p>
-                     <p class="text-neutral-700">Limitações: IA pode "alucinar"; supervisão humana é essencial. <span class="citation">[32]</span></p>
+                <div class="bg-slate-800 p-6 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-semibold text-sky-300 mb-4">C. Alavancando a IA para Documentação Eficiente</h4>
+                     <p class="text-slate-300 mb-2">A IA pode auxiliar significativamente na criação e manutenção de documentação, gerando rascunhos de descrições de código, sumarizando informações complexas, melhorando a clareza textual e ajudando a manter a documentação atualizada com as mudanças no código. <span class="citation">[11, 19, 30, 31, 32, 33, 34]</span></p>
+                     <p class="text-slate-300 mb-2">Ferramentas como Mintlify, GitHub Copilot, Tabnine Docs, DocuWriter.ai e as capacidades de documentação do próprio Cursor são exemplos de como a IA pode ser integrada neste processo. <span class="citation">[11, 19, 31]</span></p>
+                     <p class="text-slate-300">Apesar dos avanços, a IA pode "alucinar" ou omitir nuances importantes. Portanto, a supervisão e revisão humana continuam a ser essenciais para garantir a precisão e relevância da documentação gerada por IA. <span class="citation">[32]</span></p>
                 </div>
             </section>
 
-            <section id="prompts" class="content-section space-y-6">
-                <h3 class="text-3xl font-semibold text-orange-500 mb-6 border-b border-orange-200 pb-3">IV. Engenharia de Prompts Eficazes para Assistência de IA Superior</h3>
-                <p class="text-lg leading-relaxed text-neutral-700">A qualidade da assistência de IA depende diretamente da qualidade dos prompts. Dominar a engenharia de prompts é crucial. Esta seção cobre os princípios fundamentais (clareza, contexto, persona, formato, exemplos, iteração), técnicas avançadas (Zero-Shot, Few-Shot, Chain-of-Thought, Self-Consistency, decomposição de tarefas) e como criar prompts ótimos para geração de código e tarefas complexas no Cursor, incluindo erros comuns a evitar.</p>
+            <section id="prompts" class="content-section space-y-8">
+                <h3 class="text-3xl font-semibold text-sky-400 mb-6 border-b border-slate-700 pb-3">IV. Engenharia de Prompts Eficazes para Assistência de IA Superior</h3>
+                <p class="text-lg leading-relaxed text-slate-300">A qualidade da assistência de IA depende diretamente da qualidade dos prompts. Dominar a engenharia de prompts é crucial para extrair o máximo valor das ferramentas de IA. Esta seção cobre os princípios fundamentais (clareza, contexto, persona, formato, exemplos, iteração), técnicas avançadas (Zero-Shot, Few-Shot, Chain-of-Thought, Self-Consistency, decomposição de tarefas) e como criar prompts ótimos para geração de código e tarefas complexas no Cursor, incluindo erros comuns a evitar.</p>
 
-                <div class="bg-amber-50 p-6 rounded-lg shadow">
-                    <h4 class="text-2xl font-semibold text-orange-600 mb-4">A. Princípios Fundamentais da Engenharia de Prompts</h4>
-                    <ul class="list-disc list-inside space-y-3 text-neutral-700">
-                        <li><strong>Clareza e Especificidade:</strong> Instruções diretas e inequívocas. <span class="citation">[1, 35-40]</span></li>
-                        <li><strong>Fornecimento de Contexto:</strong> Informações de fundo, código, documentação. <span class="citation">[1, 35, 37, 38, 40]</span></li>
-                        <li><strong>Definição da Persona/Papel:</strong> Instruir a IA a adotar um papel específico. <span class="citation">[37, 39, 40]</span></li>
-                        <li><strong>Especificação do Formato de Saída:</strong> Declarar o formato desejado. <span class="citation">[35, 36, 37, 40]</span></li>
-                        <li><strong>Uso de Exemplos (Prompting Few-Shot):</strong> Fornecer exemplos entrada-saída. <span class="citation">[36, 37]</span></li>
-                        <li><strong>Refinamento Iterativo:</strong> Analisar e ajustar prompts. <span class="citation">[1, 36, 37, 39]</span></li>
+                <div class="bg-slate-800 p-6 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-semibold text-sky-300 mb-4">A. Princípios Fundamentais da Engenharia de Prompts</h4>
+                    <ul class="list-disc list-inside space-y-3 text-slate-300 pl-2">
+                        <li><strong>Clareza e Especificidade:</strong> Use linguagem precisa e evite ambiguidades. Instruções diretas e inequívocas geram melhores resultados. <span class="citation">[1, 35-40]</span></li>
+                        <li><strong>Fornecimento de Contexto:</strong> Inclua informações de fundo relevantes, snippets de código, documentação de bibliotecas ou frameworks, e o estado atual do projeto. <span class="citation">[1, 35, 37, 38, 40]</span></li>
+                        <li><strong>Definição da Persona/Papel:</strong> Instrua a IA a adotar um papel específico (ex: "Aja como um programador Python sénior especializado em Django"). <span class="citation">[37, 39, 40]</span></li>
+                        <li><strong>Especificação do Formato de Saída:</strong> Declare explicitamente o formato desejado para a resposta (ex: JSON, uma função Python, uma lista de passos). <span class="citation">[35, 36, 37, 40]</span></li>
+                        <li><strong>Uso de Exemplos (Prompting Few-Shot):</strong> Forneça um ou mais exemplos de pares entrada-saída para guiar a IA, especialmente para formatos ou estilos específicos. <span class="citation">[36, 37]</span></li>
+                        <li><strong>Refinamento Iterativo:</strong> Analise as respostas da IA e ajuste os prompts com base nos resultados. A engenharia de prompts é um processo de tentativa e erro. <span class="citation">[1, 36, 37, 39]</span></li>
                     </ul>
                 </div>
 
-                <div class="bg-amber-50 p-6 rounded-lg shadow">
-                    <h4 class="text-2xl font-semibold text-orange-600 mb-4">B. Técnicas Avançadas de Prompting</h4>
-                    <ul class="list-disc list-inside space-y-3 text-neutral-700">
-                        <li><strong>Prompting Zero-Shot:</strong> Sem exemplos, para tarefas diretas. <span class="citation">[36, 37]</span></li>
-                        <li><strong>Prompting Chain-of-Thought (CoT):</strong> IA explica o raciocínio passo a passo. <span class="citation">[36, 37, 40]</span></li>
-                        <li><strong>Prompting Self-Consistency:</strong> Gerar múltiplas respostas e selecionar a mais consistente. <span class="citation">[37]</span></li>
-                        <li><strong>Decomposição de Tarefas Complexas:</strong> Dividir em sub-tarefas menores. <span class="citation">[3, 17, 37, 41]</span></li>
+                <div class="bg-slate-800 p-6 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-semibold text-sky-300 mb-4">B. Técnicas Avançadas de Prompting</h4>
+                    <ul class="list-disc list-inside space-y-3 text-slate-300 pl-2">
+                        <li><strong>Prompting Zero-Shot:</strong> Pedir à IA para realizar uma tarefa sem fornecer exemplos explícitos, confiando no seu conhecimento pré-treinado. <span class="citation">[36, 37]</span></li>
+                        <li><strong>Prompting Chain-of-Thought (CoT):</strong> Encorajar a IA a "pensar passo a passo" ou explicar o seu processo de raciocínio antes de fornecer a resposta final. Isso melhora a precisão em tarefas complexas. <span class="citation">[36, 37, 40]</span></li>
+                        <li><strong>Prompting Self-Consistency:</strong> Gerar múltiplas respostas para o mesmo prompt (usando diferentes "temperaturas" ou variações no prompt) e depois selecionar a resposta mais comum ou consistente. <span class="citation">[37]</span></li>
+                        <li><strong>Decomposição de Tarefas Complexas:</strong> Dividir um problema grande em sub-tarefas menores e mais manejáveis, criando prompts específicos para cada uma. <span class="citation">[3, 17, 37, 41]</span></li>
                     </ul>
                 </div>
                 
-                <div class="bg-amber-50 p-6 rounded-lg shadow">
-                    <h4 class="text-2xl font-semibold text-orange-600 mb-4">C. Criando Prompts Ótimos no Cursor e Estruturas Sugeridas</h4>
-                    <p class="text-neutral-700 mb-4">Aplicar princípios para geração de código, tarefas complexas com Modo Agent e depuração iterativa. Evitar prompts vagos, sobrecarregados ou sem contexto. <span class="citation">[1, 17, 22, 23, 24, 37, 40, 41, 42]</span></p>
+                <div class="bg-slate-800 p-6 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-semibold text-sky-300 mb-4">C. Criando Prompts Ótimos no Cursor e Estruturas Sugeridas</h4>
+                    <p class="text-slate-300 mb-4">No Cursor, aplicar estes princípios é vital para alavancar funcionalidades como o Modo Agent e a geração de código. Prompts devem ser contextuais, utilizando @-símbolos e Regras do Cursor. Evite prompts excessivamente vagos, sobrecarregados de informação irrelevante, ou que não forneçam contexto suficiente sobre o código existente e os padrões do projeto. <span class="citation">[1, 17, 22, 23, 24, 37, 40, 41, 42]</span></p>
                     <div class="overflow-x-auto rounded-lg shadow-md">
-                        <table class="min-w-full bg-white">
+                        <table class="min-w-full">
                             <thead>
                                 <tr>
                                     <th>Tipo de Tarefa</th>
@@ -291,53 +371,53 @@
                                     <th>Exemplo de Prompt (Conceitual)</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="text-slate-300">
                                 <tr>
                                     <td>Geração de Função/Método</td>
-                                    <td>Papel, Instrução, Contexto (linguagem, libs, I/O, restrições), Formato</td>
-                                    <td>"És um especialista em Java. Escreve um método público `calculateDiscount` que aceita `double price` e `int percentage` e retorna o preço com desconto."</td>
+                                    <td>Papel da IA, Instrução clara da tarefa, Contexto (linguagem, bibliotecas, dados de entrada/saída, restrições de design, exemplos se necessário), Formato de saída esperado.</td>
+                                    <td>"Aja como um especialista em Java. Escreve um método público `calculateDiscount` que aceita um `double price` e um `int percentage` como parâmetros, e retorna o preço com o desconto aplicado como um `double`. Garanta que a percentagem é válida (0-100)."</td>
                                 </tr>
                                 <tr>
                                     <td>Depuração de Código</td>
-                                    <td>Instrução, Contexto (código, erro, esperado vs. observado), Papel</td>
-                                    <td>"Analisa este JavaScript e o erro `Uncaught TypeError...`. Explica a causa e sugere correção."</td>
+                                    <td>Instrução para analisar e depurar, Contexto (o snippet de código com o bug, a mensagem de erro completa, o comportamento esperado vs. o observado), Papel (opcional).</td>
+                                    <td>"Analisa este snippet de código JavaScript e a mensagem de erro `Uncaught TypeError: Cannot read property 'name' of undefined`. Explica a causa provável do erro e sugere uma correção para lidar com o objeto potencialmente indefinido."</td>
                                 </tr>
                                 <tr>
                                     <td>Refatorização de Código</td>
-                                    <td>Instrução (objetivo, padrão), Contexto (código, restrições)</td>
-                                    <td>"Refatora esta função Python para usar compreensão de listas, mantendo a funcionalidade."</td>
+                                    <td>Instrução para refatorar, Objetivo da refatorização (ex: melhorar legibilidade, performance, seguir um padrão), Contexto (o código a ser refatorado, quaisquer restrições ou padrões a seguir).</td>
+                                    <td>"Refatora esta função Python para usar compreensão de listas em vez do loop `for` explícito, mantendo a mesma funcionalidade e melhorando a concisão. O código é: `def get_squares(numbers): squares = []; for n in numbers: squares.append(n*n); return squares`"</td>
                                 </tr>
                                 <tr>
                                     <td>Geração de Casos de Teste</td>
-                                    <td>Instrução, Contexto (função, framework, tipos de casos)</td>
-                                    <td>"Gera testes unitários JUnit para `isValidEmail(String email)`. Inclui casos válidos, inválidos, limite."</td>
+                                    <td>Instrução para gerar testes, Contexto (a função ou método a ser testado, o framework de teste a ser usado - ex: JUnit, pytest), Tipos de casos de teste desejados (ex: válidos, inválidos, de limite, de exceção).</td>
+                                    <td>"Gera casos de teste unitários usando pytest para a função Python `def is_valid_email(email_address: str) -> bool:`. Inclui casos para emails válidos, formatos inválidos, strings vazias e valores nulos."</td>
                                 </tr>
                                 <tr>
                                     <td>Geração de Documentação</td>
-                                    <td>Instrução, Contexto (função, formato de docstring)</td>
-                                    <td>"Escreve uma docstring Google para a função Python X, explicando parâmetros, retorno, exceções."</td>
+                                    <td>Instrução para documentar, Contexto (a função, classe ou módulo a ser documentado), Formato de docstring/comentário desejado (ex: Google Style Python, Javadoc).</td>
+                                    <td>"Escreve uma docstring no estilo Google para a seguinte função Python, explicando claramente seus parâmetros, o que ela retorna, e quaisquer exceções que possa levantar: `def process_data(data_list, threshold): ...`"</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <p class="text-sm text-neutral-600 mt-2">Fontes: <span class="citation">[1, 35-42]</span></p>
+                    <p class="text-sm text-slate-400 mt-2">Fontes: <span class="citation">[1, 35-42]</span></p>
                 </div>
             </section>
 
-            <section id="ferramentas" class="content-section space-y-6">
-                <h3 class="text-3xl font-semibold text-orange-500 mb-6 border-b border-orange-200 pb-3">V. Expandindo o Conjunto de Ferramentas do Programador de IA</h3>
-                <p class="text-lg leading-relaxed text-neutral-700">Um ambiente produtivo beneficia de um ecossistema de ferramentas complementares. Esta seção cobre ferramentas de suporte essenciais (segurança, teste, CI/CD, monitorização, compreensão de código, análise estática, transcrição), plataformas para rastreio e gestão de experiências de ML (MLflow, Weights & Biases, Neptune.ai) e a importância das ferramentas de rotulagem de dados (Label Studio, CVAT, etc.), pois a qualidade dos dados é crítica.</p>
+            <section id="ferramentas" class="content-section space-y-8">
+                <h3 class="text-3xl font-semibold text-sky-400 mb-6 border-b border-slate-700 pb-3">V. Expandindo o Conjunto de Ferramentas do Programador de IA</h3>
+                <p class="text-lg leading-relaxed text-slate-300">Um ambiente de desenvolvimento de IA produtivo não se limita ao IDE. Ele beneficia-se de um ecossistema de ferramentas complementares que abordam diferentes aspetos do ciclo de vida do desenvolvimento. Esta seção cobre ferramentas de suporte essenciais (para segurança, teste, CI/CD, monitorização, compreensão de código, análise estática, transcrição), plataformas robustas para rastreio e gestão de experiências de Machine Learning (MLflow, Weights & Biases, Neptune.ai) e a importância crítica das ferramentas de rotulagem de dados (Label Studio, CVAT, etc.), dado que a qualidade dos dados de treino é um pilar fundamental para o sucesso dos modelos de IA.</p>
                 
-                <div class="bg-amber-50 p-6 rounded-lg shadow">
-                    <h4 class="text-2xl font-semibold text-orange-600 mb-4">A. Ferramentas de Suporte Essenciais para Além do IDE</h4>
-                    <p class="text-neutral-700">Snyk (segurança), Applitools (teste de UI), Harness (CI/CD), New Relic AI (monitorização), Figstack (compreensão de código), Codiga/DeepCode AI (análise estática), Otter.ai (transcrição). <span class="citation">[11]</span></p>
+                <div class="bg-slate-800 p-6 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-semibold text-sky-300 mb-4">A. Ferramentas de Suporte Essenciais para Além do IDE</h4>
+                    <p class="text-slate-300">Para além do editor de código, várias ferramentas podem aumentar a produtividade e a qualidade: Snyk (segurança de código e dependências), Applitools (teste visual de UI com IA), Harness (plataforma de CI/CD), New Relic AI (monitorização de performance de aplicações), Figstack (compreensão e tradução de código), Codiga/DeepCode AI (análise estática avançada), Otter.ai (transcrição de áudio para texto, útil para reuniões e documentação). <span class="citation">[11]</span></p>
                 </div>
 
-                <div class="bg-amber-50 p-6 rounded-lg shadow">
-                    <h4 class="text-2xl font-semibold text-orange-600 mb-4">B. Plataformas para Rastreio e Gestão de Experiências</h4>
-                    <p class="text-neutral-700 mb-4">Rastrear experiências, parâmetros, métricas e artefactos é vital para reprodutibilidade. <span class="citation">[43, 44]</span></p>
+                <div class="bg-slate-800 p-6 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-semibold text-sky-300 mb-4">B. Plataformas para Rastreio e Gestão de Experiências de ML</h4>
+                    <p class="text-slate-300 mb-4">Rastrear experiências, parâmetros, métricas, versões de código e artefactos é vital para a reprodutibilidade, depuração e colaboração em projetos de ML. <span class="citation">[43, 44]</span></p>
                     <div class="overflow-x-auto rounded-lg shadow-md">
-                        <table class="min-w-full bg-white">
+                        <table class="min-w-full">
                             <thead>
                                 <tr>
                                     <th>Funcionalidade</th>
@@ -346,64 +426,73 @@
                                     <th>Neptune.ai</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="text-slate-300">
                                 <tr>
                                     <td>Modelo de Implementação</td>
-                                    <td>Open-source</td>
-                                    <td>Principalmente SaaS</td>
-                                    <td>SaaS</td>
+                                    <td>Open-source, pode ser auto-hospedado ou usado em plataformas como Databricks.</td>
+                                    <td>Principalmente SaaS (nuvem), com opção de auto-hospedagem para empresas.</td>
+                                    <td>SaaS, com opção de auto-hospedagem para empresas.</td>
                                 </tr>
                                 <tr>
                                     <td>Pontos Fortes Chave</td>
-                                    <td>Simplicidade, agnóstico à linguagem, registo de modelos</td>
-                                    <td>UI polida, visualização avançada, colaboração, sweeps</td>
-                                    <td>Metadados personalizáveis, pesquisa robusta, comparação detalhada</td>
+                                    <td>Simplicidade, agnóstico à linguagem, forte integração com ecossistema Spark, registo de modelos robusto.</td>
+                                    <td>Interface de utilizador (UI) polida e intuitiva, visualizações avançadas, dashboards personalizáveis, funcionalidades de colaboração e sweeps de hiperparâmetros.</td>
+                                    <td>Estrutura de metadados altamente personalizável, capacidades de pesquisa e filtragem robustas, comparação detalhada de experiências, UI flexível.</td>
                                 </tr>
                                  <tr>
                                     <td>Registo de Modelos</td>
-                                    <td>Integrado</td>
-                                    <td>UI sobre Artifacts</td>
-                                    <td>Foco em metadados; integrações</td>
+                                    <td>Componente central e bem integrado.</td>
+                                    <td>Funcionalidade de registo de modelos construída sobre o sistema de Artifacts.</td>
+                                    <td>Foco no rastreio de metadados de modelos; integrações com ferramentas de registo dedicadas ou uso dos seus metadados para gestão.</td>
                                  </tr>
                                  <tr>
                                     <td>Preço</td>
-                                    <td>Gratuito (OS)</td>
-                                    <td>Baseado no uso; escalão gratuito</td>
-                                    <td>Baseado no uso; escalão gratuito</td>
+                                    <td>Gratuito (Open-source). Custos de infraestrutura se auto-hospedado.</td>
+                                    <td>Baseado no uso (horas de rastreio, armazenamento); oferece um generoso escalão gratuito para indivíduos e projetos pequenos.</td>
+                                    <td>Baseado no uso (pontos de dados ingeridos, armazenamento); oferece um escalão gratuito para indivíduos.</td>
                                  </tr>
                             </tbody>
                         </table>
                     </div>
-                    <p class="text-sm text-neutral-600 mt-2">Fontes: <span class="citation">[43, 44]</span></p>
+                    <p class="text-sm text-slate-400 mt-2">Fontes: <span class="citation">[43, 44]</span></p>
                 </div>
 
-                <div class="bg-amber-50 p-6 rounded-lg shadow">
-                    <h4 class="text-2xl font-semibold text-orange-600 mb-4">C. Visão Geral das Ferramentas de Rotulagem de Dados</h4>
-                    <p class="text-neutral-700">Qualidade dos dados de treino é crítica. Ferramentas como Label Studio, CVAT, SuperAnnotate ajudam na rotulagem de texto, imagem, vídeo e áudio. <span class="citation">[29, 45, 46]</span></p>
+                <div class="bg-slate-800 p-6 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-semibold text-sky-300 mb-4">C. Visão Geral das Ferramentas de Rotulagem de Dados</h4>
+                    <p class="text-slate-300">A qualidade dos dados de treino é um dos fatores mais críticos para o sucesso de modelos de IA. Ferramentas de rotulagem de dados auxiliam na criação de datasets de alta qualidade. Exemplos incluem Label Studio (open-source, versátil para vários tipos de dados), CVAT (Computer Vision Annotation Tool, open-source, focado em imagem/vídeo), SuperAnnotate, V7, Dataloop (plataformas comerciais com funcionalidades avançadas e IA assistida para rotulagem). A escolha da ferramenta depende do tipo de dados (texto, imagem, vídeo, áudio), volume, necessidade de colaboração e orçamento. <span class="citation">[29, 45, 46]</span></p>
                 </div>
             </section>
 
-            <section id="automacao" class="content-section space-y-6">
-                <h3 class="text-3xl font-semibold text-orange-500 mb-6 border-b border-orange-200 pb-3">VI. Automatizando e Otimizando Fluxos de Trabalho de Desenvolvimento de IA</h3>
-                <p class="text-lg leading-relaxed text-neutral-700">A otimização da produtividade vem da criação de fluxos de trabalho personalizados e da automação. Esta seção discute o desenvolvimento de scripts de IA personalizados para tarefas repetitivas (geração de templates, automação no IDE, integração de ferramentas como GitHub/Jira) e a integração de APIs e serviços de LLM externos (ex: OpenRouter com Cursor para acesso a múltiplos modelos, ou construção de pipelines de dados com Cursor e `dlt`). A gestão de estado e regras para autonomia da IA também é abordada.</p>
+            <section id="automacao" class="content-section space-y-8">
+                <h3 class="text-3xl font-semibold text-sky-400 mb-6 border-b border-slate-700 pb-3">VI. Automatizando e Otimizando Fluxos de Trabalho de Desenvolvimento de IA</h3>
+                <p class="text-lg leading-relaxed text-slate-300">A verdadeira otimização da produtividade no desenvolvimento de IA advém da criação de fluxos de trabalho personalizados e da automação inteligente de tarefas. Esta seção discute estratégias para o desenvolvimento de scripts de IA personalizados que podem lidar com tarefas repetitivas, como a geração de templates de código, automação de ações dentro do IDE e a integração com outras ferramentas de desenvolvimento (ex: GitHub, Jira). Adicionalmente, exploramos como integrar APIs e serviços de LLM externos de forma eficaz (por exemplo, utilizando OpenRouter com o Cursor para aceder a uma variedade de modelos de linguagem, ou construindo pipelines de ingestão de dados com o Cursor e a ferramenta `dlt`). A gestão de estado e a configuração de regras para permitir maior autonomia da IA em processos complexos também são abordadas como elementos chave para fluxos de trabalho mais eficientes.</p>
 
-                <div class="bg-amber-50 p-6 rounded-lg shadow">
-                    <h4 class="text-2xl font-semibold text-orange-600 mb-4">A. Desenvolvendo Scripts de IA Personalizados e Automatizando Tarefas</h4>
-                    <p class="text-neutral-700">Geração de templates, automação de tarefas no IDE (formatação, linters, stubs), integração com GitHub, Jira, Slack. <span class="citation">[19, 22, 33]</span></p>
+                <div class="bg-slate-800 p-6 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-semibold text-sky-300 mb-4">A. Desenvolvendo Scripts de IA Personalizados e Automatizando Tarefas Repetitivas</h4>
+                    <p class="text-slate-300">A criação de scripts personalizados pode automatizar tarefas como: geração de boilerplate para novos componentes ou módulos, formatação de código consistente, execução de linters e testes básicos, criação de stubs de funções, e até mesmo a integração com sistemas de gestão de tarefas como Jira (para criar ou atualizar issues) ou plataformas de versionamento como GitHub (para automatizar partes do processo de PR). IDEs como o Cursor, com suas capacidades de execução de comandos e manipulação de ficheiros via IA, facilitam essa automação. <span class="citation">[19, 22, 33]</span></p>
                 </div>
                 
-                <div class="bg-amber-50 p-6 rounded-lg shadow">
-                    <h4 class="text-2xl font-semibold text-orange-600 mb-4">B. Integrando APIs e Serviços de LLM Externos</h4>
-                    <p class="text-neutral-700 mb-2">Plataformas como OpenRouter permitem acesso a diversos LLMs (Claude, GPT-4, etc.) para escolher o modelo ideal por tarefa. <span class="citation">[47]</span></p>
-                    <p class="text-neutral-700 mb-2">Exemplo: Construção de pipelines de dados com Cursor e `dlt` (data load tool), envolvendo configuração de contexto, prompting, inspeção, teste e depuração iterativa com o LLM. <span class="citation">[34, 41]</span></p>
-                    <p class="text-neutral-700">Gestão de estado (ex: `workflow_state.md`) e regras para maior autonomia da IA em tarefas complexas. <span class="citation">[47]</span></p>
+                <div class="bg-slate-800 p-6 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-semibold text-sky-300 mb-4">B. Integrando APIs e Serviços de LLM Externos para Capacidades Expandidas</h4>
+                    <p class="text-slate-300 mb-2">A integração com serviços de LLM externos através de APIs permite flexibilidade na escolha do modelo mais adequado para cada tarefa. Plataformas como OpenRouter, que podem ser usadas com o Cursor (por exemplo, através de servidores MCP), fornecem acesso unificado a diversos LLMs (Claude, GPT-4, Gemini, modelos open-source), permitindo que o programador ou a própria IA selecionem o modelo ideal com base no custo, performance ou especialização. <span class="citation">[47]</span></p>
+                    <p class="text-slate-300 mb-2">Um exemplo prático é a construção de pipelines de ingestão de dados, como demonstrado pelo uso do Cursor com a ferramenta `dlt` (data load tool). Este processo envolve: configuração de contexto no Cursor (fornecendo documentação da API e da `dlt`), prompting iterativo para gerar o código do pipeline, inspeção do código gerado, teste incremental, e depuração colaborativa com o LLM para resolver erros. <span class="citation">[34, 41]</span></p>
+                    <p class="text-slate-300">Para fluxos de trabalho de IA mais autónomos e complexos, a gestão de estado (por exemplo, através de ficheiros como `workflow_state.md` que rastreiam o progresso e o plano da IA) e a definição de regras claras (como as Regras do Cursor) são cruciais. Isso permite que a IA opere com maior independência, tome decisões informadas e execute sequências de tarefas de forma mais robusta. <span class="citation">[47]</span></p>
                 </div>
             </section>
 
-            <section id="conclusao" class="content-section space-y-6">
-                <h3 class="text-3xl font-semibold text-orange-500 mb-6 border-b border-orange-200 pb-3">VII. Conclusão: Sintetizando Estratégias para Produtividade Sustentada</h3>
-                <p class="text-lg leading-relaxed text-neutral-700">Criar um ambiente de IA produtivo é um esforço multifacetado. Requer fundamentos sólidos (infraestrutura, gestão de dependências, controle de versão <span class="citation">[5-10]</span>), maestria em IDEs como o Cursor (contexto, Agent, personalização <span class="citation">[17, 19, 20, 22, 23, 25]</span>), documentação estratégica (clareza, colaboração, responsabilidade <span class="citation">[28, 29, 32, 34]</span>), engenharia de prompts eficaz (clareza, contexto, técnicas avançadas <span class="citation">[36, 37]</span>), um conjunto expandido de ferramentas (segurança, rastreio, rotulagem <span class="citation">[11, 43-46]</span>) e automação de fluxos de trabalho (scripts, integração de LLMs <span class="citation">[47]</span>).</p>
-                <p class="text-lg leading-relaxed text-neutral-700">A "fluência em IA" e uma abordagem iterativa e crítica são competências humanas centrais. A otimização da produtividade é um processo contínuo de aprendizagem e adaptação, com o potencial de transformar o desenvolvimento de software.</p>
+            <section id="conclusao" class="content-section space-y-8">
+                <h3 class="text-3xl font-semibold text-sky-400 mb-6 border-b border-slate-700 pb-3">VII. Conclusão: Sintetizando Estratégias para Produtividade Sustentada</h3>
+                <p class="text-lg leading-relaxed text-slate-300">Criar um ambiente de desenvolvimento de Inteligência Artificial verdadeiramente produtivo é um esforço multifacetado e contínuo. Não se trata apenas de adotar uma nova ferramenta, mas de cultivar uma nova mentalidade e um conjunto de práticas que alavanquem o poder da IA enquanto mantêm a supervisão e o pensamento crítico humanos.</p>
+                <p class="text-lg leading-relaxed text-slate-300">Conforme explorado neste relatório, a produtividade sustentada em IA é construída sobre vários pilares interconectados:</p>
+                <ul class="list-disc list-inside space-y-3 text-slate-300 pl-2 my-4">
+                    <li><strong>Fundamentos Sólidos:</strong> Uma infraestrutura robusta (hardware adequado <span class="citation">[5, 6]</span>), gestão de dependências rigorosa <span class="citation">[7, 8]</span> e controle de versão abrangente para código, dados e modelos <span class="citation">[9, 10]</span> são a base indispensável.</li>
+                    <li><strong>Maestria em IDEs Alimentados por IA:</strong> Ferramentas como o Cursor transformam o desenvolvimento, mas exigem proficiência no uso de suas funcionalidades avançadas, como compreensão contextual, Modo Agent, personalização via Regras e extensibilidade com MCP. <span class="citation">[17, 19, 20, 22, 23, 25]</span></li>
+                    <li><strong>Documentação Estratégica:</strong> Documentar de forma abrangente e assistida por IA não é um luxo, mas uma necessidade para clareza, colaboração, reprodutibilidade e responsabilidade. <span class="citation">[28, 29, 32, 34]</span></li>
+                    <li><strong>Engenharia de Prompts Eficaz:</strong> A habilidade de comunicar intenções de forma clara e contextual à IA é uma competência central, multiplicando a eficácia da assistência recebida. <span class="citation">[36, 37]</span></li>
+                    <li><strong>Um Conjunto de Ferramentas Expandido:</strong> Complementar o IDE com ferramentas especializadas para segurança, teste, CI/CD, rastreio de experiências de ML e rotulagem de dados enriquece o ambiente de desenvolvimento. <span class="citation">[11, 43-46]</span></li>
+                    <li><strong>Automação Inteligente de Fluxos de Trabalho:</strong> Desenvolver scripts personalizados e integrar LLMs externos pode otimizar tarefas repetitivas e complexas, liberando tempo para inovação. <span class="citation">[47]</span></li>
+                </ul>
+                <p class="text-lg leading-relaxed text-slate-300">Em última análise, a "fluência em IA" <span class="citation">[2]</span> – a capacidade de colaborar efetivamente com sistemas de IA, compreendendo suas forças e limitações – e uma abordagem iterativa e crítica são as competências humanas que permanecem no centro da produtividade. A otimização do desenvolvimento de IA é um processo dinâmico de aprendizagem, experimentação e adaptação, com o potencial de redefinir fundamentalmente como o software é criado e como os problemas complexos são resolvidos.</p>
             </section>
 
         </main>
@@ -413,26 +502,49 @@
         document.addEventListener('DOMContentLoaded', function () {
             const navLinks = document.querySelectorAll('.nav-link');
             const contentSections = document.querySelectorAll('.content-section');
-            const mainTitle = document.getElementById('main-title');
+            const mainTitleElement = document.getElementById('main-title');
             const reportTitleBase = "Maximizando a Produtividade no Desenvolvimento de IA";
+            let currentActiveSection = null;
 
             function updateContent(hash) {
                 let sectionFound = false;
+                let targetSection = null;
+
                 contentSections.forEach(section => {
-                    if (hash === '#' + section.id) {
-                        section.classList.add('active');
-                        const sectionTitleElement = section.querySelector('h3');
-                        mainTitle.textContent = sectionTitleElement ? sectionTitleElement.textContent : reportTitleBase;
+                    if ('#' + section.id === hash) {
+                        targetSection = section;
                         sectionFound = true;
-                    } else {
-                        section.classList.remove('active');
                     }
                 });
 
                 if (!sectionFound && contentSections.length > 0) {
-                    contentSections[0].classList.add('active');
-                     const firstSectionTitleElement = contentSections[0].querySelector('h3');
-                    mainTitle.textContent = firstSectionTitleElement ? firstSectionTitleElement.textContent : reportTitleBase;
+                    targetSection = contentSections[0];
+                    hash = '#' + targetSection.id; 
+                }
+
+                if (currentActiveSection && currentActiveSection !== targetSection) {
+                    currentActiveSection.classList.remove('activated');
+                    const oldSectionToHide = currentActiveSection;
+                    oldSectionToHide.addEventListener('transitionend', function onTransitionEnd() {
+                         if (!oldSectionToHide.classList.contains('activated')) {
+                            oldSectionToHide.style.position = 'absolute';
+                            oldSectionToHide.style.visibility = 'hidden';
+                         }
+                         oldSectionToHide.removeEventListener('transitionend', onTransitionEnd);
+                    });
+                }
+                
+                if (targetSection) {
+                    targetSection.style.position = 'relative';
+                    targetSection.style.visibility = 'visible';
+                    
+                    requestAnimationFrame(() => {
+                         targetSection.classList.add('activated');
+                    });
+
+                    currentActiveSection = targetSection;
+                    const sectionTitleElement = targetSection.querySelector('h3');
+                    mainTitleElement.textContent = sectionTitleElement ? sectionTitleElement.textContent : reportTitleBase;
                 }
                 
                 navLinks.forEach(link => {
@@ -448,19 +560,32 @@
                 link.addEventListener('click', function (e) {
                     e.preventDefault();
                     const targetId = this.getAttribute('href');
+                    if (window.location.hash === targetId && currentActiveSection && '#' + currentActiveSection.id === targetId) return;
+                    
                     history.pushState(null, '', targetId);
                     updateContent(targetId);
-                    window.scrollTo(0, 0);
+                    if (window.innerWidth < 768) {
+                        window.scrollTo({ top: mainTitleElement.offsetTop - 20, behavior: 'smooth' });
+                    } else {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
                 });
             });
 
             window.addEventListener('popstate', function () {
-                updateContent(window.location.hash || '#'+contentSections[0].id);
+                const hash = window.location.hash || (contentSections.length > 0 ? '#' + contentSections[0].id : '');
+                updateContent(hash);
             });
             
-            updateContent(window.location.hash || (contentSections.length > 0 ? '#'+contentSections[0].id : ''));
+            contentSections.forEach(section => {
+                section.style.position = 'absolute';
+                section.style.visibility = 'hidden';
+            });
+
+            const initialHash = window.location.hash || (contentSections.length > 0 ? '#' + contentSections[0].id : '');
+            updateContent(initialHash);
             if (!window.location.hash && contentSections.length > 0) {
-                 history.replaceState(null, '', '#'+contentSections[0].id);
+                 history.replaceState(null, '', '#' + contentSections[0].id);
                  const firstNavLink = document.querySelector(`.nav-link[href="#${contentSections[0].id}"]`);
                  if(firstNavLink) firstNavLink.classList.add('active');
             }
@@ -470,8 +595,15 @@
             accordionButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const content = button.nextElementSibling;
-                    button.classList.toggle('open');
-                    content.classList.toggle('open');
+                    const isOpen = button.classList.contains('open');
+                    
+                    if (isOpen) {
+                        button.classList.remove('open');
+                        content.classList.remove('open');
+                    } else {
+                        button.classList.add('open');
+                        content.classList.add('open');
+                    }
                 });
             });
         });
