@@ -1,550 +1,251 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IA para Desenvolvimento Produtivo Web</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Application Structure Plan: 
-        A SPA com um cabeçalho, navegação lateral (alternando para um menu hambúrguer em telas menores), e uma área de conteúdo principal.
-        Cada seção principal terá uma capa no topo com animação CSS e o título da seção.
-        A navegação permitirá aos usuários alternar entre as seções principais do relatório com transições animadas.
-        O conteúdo de cada seção será apresentado abaixo da sua capa, de forma estruturada.
-        Esta estrutura foi escolhida para uma estética moderna e organizada, melhorando a experiência do usuário com transições suaves e um visual limpo.
-    -->
-    <!-- Visualization & Content Choices: 
-        - Relatório Info: Estrutura geral (Seções I-VI + Gráfico). Objetivo: Organizar/Navegar. Método: Seções HTML com capas animadas, JS para navegação com transições. Interação: Clique para navegar. Justificativa: Estética moderna e melhor UX.
-        - Relatório Info: Conteúdo textual. Objetivo: Informar. Método: Parágrafos HTML, cabeçalhos dentro de wrappers de conteúdo. Interação: Leitura. Justificativa: Apresentação clara.
-        - Relatório Info: Tabelas. Objetivo: Informar/Comparar. Método: Tabelas HTML estilizadas. Interação: Leitura. Justificativa: Dados estruturados.
-        - Relatório Info: Trechos de código/prompts. Objetivo: Ilustrar. Método: Blocos de código HTML. Interação: Leitura. Justificativa: Apresentação clara.
-        - Relatório Info: Impacto conceitual da IA. Objetivo: Visualizar. Método: Gráfico de Barras Chart.js. Interação: Visualizar. Justificativa: Visualização de dados. Biblioteca: Chart.js.
-    -->
-    <style>
-        html, body {
-            font-family: 'Inter', sans-serif;
-            background-color: #ffffff; /* bg-white */
-            color: #334155; /* text-slate-700 */
-            scroll-behavior: smooth;
-        }
-        .nav-link {
-            display: block;
-            padding: 0.75rem 1rem;
-            border-radius: 0.375rem;
-            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-            color: #475569; /* text-slate-600 */
-            font-weight: 500;
-        }
-        .nav-link:hover {
-            background-color: #f1f5f9; /* bg-slate-100 */
-            color: #1e293b; /* text-slate-800 */
-        }
-        .nav-link.active {
-            background-color: #3b82f6; /* bg-blue-500 */
-            color: white;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roteiro Paris → Nice (9 dias)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --accent: #ff385c;
+      --dark: #222;
+      --light: #fafafa;
+      --max-width: 1100px;
+    }
 
-        .content-section {
-            opacity: 0;
-            transform: translateY(15px);
-            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
-            display: none;
-        }
-        .content-section.active {
-            opacity: 1;
-            transform: translateY(0);
-            display: block;
-        }
-        .content-section.is-exiting {
-            opacity: 0;
-            transform: translateY(-15px);
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        h1, h3, h4, h5, h6 { /* h2 is now topic-cover-title */
-            color: #1e293b; /* text-slate-800 */
-            margin-bottom: 0.75rem;
-        }
-        h1 { font-size: 2rem; line-height: 2.25rem; font-weight: 700; margin-top: 1rem; margin-bottom: 1rem; } /* Main SPA Title */
-        h3 { font-size: 1.5rem; line-height: 2rem; font-weight: 600; margin-top: 1.75rem; } /* Sub-headers within sections */
-        h4 { font-size: 1.25rem; line-height: 1.75rem; font-weight: 600; margin-top: 1.5rem; }
-        
-        p {
-            margin-bottom: 1rem;
-            line-height: 1.75; /* More airy */
-        }
-        ul, ol {
-            margin-bottom: 1rem;
-            margin-left: 1.5rem;
-        }
-        li {
-            margin-bottom: 0.5rem;
-        }
-        ul { list-style-type: disc; }
-        ol { list-style-type: decimal; }
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
 
-        table {
-            width: 100%;
-            margin-bottom: 1.5rem;
-            border-collapse: collapse;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            border-radius: 0.5rem;
-            overflow: hidden;
-            border: 1px solid #e5e7eb; /* border-gray-200 */
-        }
-        th, td {
-            padding: 0.75rem 1rem;
-            text-align: left;
-            border-bottom: 1px solid #e5e7eb; /* border-gray-200 */
-        }
-        th {
-            background-color: #f9fafb; /* bg-gray-50 */
-            font-weight: 600;
-            color: #374151; /* text-gray-700 */
-        }
-        tr:last-child td { border-bottom: none; }
-        tr:hover { background-color: #f9fafb; /* bg-gray-50 */ }
+    header {
+      background: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    }
 
-        pre {
-            background-color: #1e293b; /* bg-slate-800 */
-            color: #e2e8f0; /* text-slate-200 */
-            padding: 1rem;
-            border-radius: 0.375rem;
-            overflow-x: auto;
-            margin-bottom: 1rem;
-            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-            font-size: 0.875rem;
-        }
-        code {
-          font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-        }
+    .wrapper {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 1rem 1.25rem;
+    }
 
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 768px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 400px;
-            max-height: 400px;
-            margin-top: 2rem;
-            margin-bottom: 2rem;
-            padding: 1.5rem; /* Increased padding */
-            background-color: white;
-            border-radius: 0.5rem;
-            border: 1px solid #e5e7eb; /* border-gray-200 */
-            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.05);
-        }
-        
-        .main-content-area { /* Renamed from .content-area for clarity */
-            max-width: 64rem; /* max-w-6xl, Notion-like content width */
-            margin-left: auto;
-            margin-right: auto;
-        }
+    h1 {
+      font-size: 1.45rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+    }
 
-        .menu-button { display: none; }
-        .sidebar {
-            transition: transform 0.3s ease-in-out;
-            background-color: #f8fafc; /* bg-slate-50 */
-            border-right: 1px solid #e5e7eb; /* border-gray-200 */
-        }
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 1.5rem 1rem;
+      display: grid;
+      gap: 1.5rem;
+    }
 
-        @media (max-width: 768px) {
-            .menu-button { display: block; }
-            .sidebar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                height: 100%;
-                z-index: 40;
-                transform: translateX(-100%);
-                box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-                border-right: none;
-            }
-            .sidebar.open { transform: translateX(0); }
-            .main-container { flex-direction: column; }
-            .content-area-wrapper { margin-left: 0; } /* Adjusted class name */
-        }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 1.5rem 1.25rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      animation: fadeUp 0.6s ease both;
+    }
 
-        .topic-cover {
-            height: 200px; /* md:h-56 */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 1rem 2rem; /* p-4 md:p-8 */
-            background: linear-gradient(120deg, #3b82f6, #2563eb, #1d4ed8, #1e3a8a); /* Blue gradient */
-            background-size: 300% 300%;
-            animation: coverGradientAnimation 20s ease infinite;
-            color: white;
-            position: relative;
-            border-radius: 0.375rem; /* rounded-md */
-            margin-bottom: 2rem; /* mb-8 */
-            overflow: hidden; /* For potential pseudo-element animations */
-        }
+    .card:nth-child(odd) { animation-delay: 0.05s; }
+    .card:nth-child(even) { animation-delay: 0.15s; }
 
-        @keyframes coverGradientAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--accent);
+    }
 
-        .topic-cover-title { /* This is the H2 for the section */
-            font-size: 2.25rem; /* text-4xl */
-            font-weight: 700;
-            line-height: 1.2;
-            margin: 0;
-        }
-        .section-content-wrapper {
-            padding: 0 1rem; /* px-4 */
-        }
-        @media (min-width: 768px) {
-            .section-content-wrapper {
-                padding: 0 2rem; /* md:px-8 */
-            }
-            .topic-cover-title {
-                font-size: 2.5rem; /* text-4xl equivalent for larger screens */
-            }
-        }
+    p, li, td, th { font-size: 0.96rem; }
 
-    </style>
+    .table-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 0.7rem 0.6rem;
+      border: 1px solid #eee;
+      text-align: left;
+    }
+
+    th {
+      background: #f1f1f1;
+      font-weight: 600;
+    }
+
+    ul { list-style-type: disc; margin-left: 1.2rem; }
+    li + li { margin-top: 0.4rem; }
+
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #666;
+      padding: 2rem 1rem 3rem;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Medium screens */
+    @media (min-width: 600px) {
+      .two-col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    }
+  </style>
 </head>
-<body class="bg-white text-slate-700">
-    <div class="flex flex-col md:flex-row min-h-screen main-container">
-        <button id="menuButton" class="menu-button md:hidden fixed top-4 left-4 z-50 p-2 bg-slate-700 text-white rounded-md shadow-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
-        </button>
+<body>
+  <header>
+    <div class="wrapper"><h1>Roteiro Paris → Nice • 9 dias</h1></div>
+  </header>
+  <main class="container">
+    <section class="card">
+      <p><strong>Resumo:</strong> Em nove dias é possível cruzar a França de norte a sul, partindo de Paris e chegando a Nice, combinando grandes ícones culturais com cidades menos óbvias como Dijon, Lyon, Avignon e Aix‑en‑Provence, sempre de trem para evitar estresse com carro. Para dois casais, o orçamento estimado fica em torno de <strong>R$ 60&nbsp;544</strong> no total (≈ R$ 15&nbsp;136 por pessoa) — valores convertidos a partir de € 1 = R$ 6,40 (jun/2025).</p>
+    </section>
 
-        <aside id="sidebar" class="sidebar w-64 md:w-72 flex-shrink-0 p-4 space-y-2 md:block">
-            <div class="text-2xl font-bold text-slate-800 mb-6 mt-2 px-2">Guia de IA</div>
-            <nav>
-                <a href="#fundamentos" class="nav-link active" data-section="fundamentos">I. Fundamentos</a>
-                <a href="#ides" class="nav-link" data-section="ides">II. Dominando IDEs</a>
-                <a href="#geracao_codigo" class="nav-link" data-section="geracao_codigo">III. Geração de Código</a>
-                <a href="#qualidade_manutenibilidade" class="nav-link" data-section="qualidade_manutenibilidade">IV. Melhorar Qualidade</a>
-                <a href="#melhores_praticas" class="nav-link" data-section="melhores_praticas">V. Melhores Práticas</a>
-                <a href="#conclusao" class="nav-link" data-section="conclusao">VI. Conclusão</a>
-                <a href="#grafico_impacto" class="nav-link" data-section="grafico_impacto">Gráfico de Impacto</a>
-            </nav>
-        </aside>
+    <section class="card">
+      <h2>Visão geral do roteiro</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>Dia</th><th>Cidade‑base</th><th>Deslocamento</th><th>Destaques</th><th>Motivo da parada</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>0</td><td>Voo</td><td>São Paulo → Paris (12 h)</td><td>—</td><td>Chegada matutina ao CDG</td></tr>
+            <tr><td>1‑2</td><td>Paris</td><td>—</td><td>Louvre, Torre Eiffel, Montmartre, cruzeiro Sena</td><td>Porta de entrada e ícones mundiais</td></tr>
+            <tr><td>3</td><td>Dijon</td><td>TGV 1 h 35</td><td>Trilha da Corujinha, degustação mostarda & vinhos</td><td>Gastronomia borgonhesa</td></tr>
+            <tr><td>4</td><td>Lyon</td><td>TER 2 h</td><td>Vieux‑Lyon, Fourvière, Halles Bocuse</td><td>Capital gastronômica</td></tr>
+            <tr><td>5</td><td>Avignon</td><td>TGV 1 h 10</td><td>Palais des Papes, Pont d’Avignon</td><td>Cidade papal medieval</td></tr>
+            <tr><td>6</td><td>Aix‑en‑Provence</td><td>TGV 0 h 20</td><td>Atelier Cézanne, Cours Mirabeau, tour rosé</td><td>Charme provençal & arte</td></tr>
+            <tr><td>7</td><td>Cannes</td><td>TGV 2 h</td><td>Ilhas Lérins, Croisette</td><td>Balneário glamouroso</td></tr>
+            <tr><td>8‑9</td><td>Nice</td><td>TER 0 h 30</td><td>Vieux Nice, Promenade des Anglais</td><td>Base na Côte d’Azur</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
 
-        <main class="flex-1 p-6 md:p-10 content-area-wrapper overflow-y-auto">
-            <div class="main-content-area">
-                <header class="mb-10 border-b border-gray-200 pb-6">
-                    <h1 class="text-3xl md:text-4xl font-bold text-slate-800">Otimizando o Desenvolvimento com IA</h1>
-                    <p class="text-md md:text-lg text-slate-500 mt-2">Um Guia para TypeScript, Angular e NestJS</p>
-                </header>
+    <section class="two-col">
+      <article class="card">
+        <h2>Dias 1‑2 • Paris</h2>
+        <ul>
+          <li>Passe: Paris Museum Pass 2 d — <strong>R$ 333</strong></li>
+          <li>Transporte (metrô 10 viagens) — <strong>R$ 127</strong></li>
+          <li>Hospedagem: Hotel 3★ Saint‑Germain — <strong>R$ 1 024/quarto</strong></li>
+          <li>Por quê: Aclimatar-se ao fuso e ver clássicos</li>
+        </ul>
+      </article>
 
-                <section id="fundamentos" class="content-section active">
-                    <div class="topic-cover">
-                        <h2 class="topic-cover-title">I. Fundamentos</h2>
-                    </div>
-                    <div class="section-content-wrapper">
-                        <h3>A. Estruturando Projetos TypeScript para Compreensão Otimizada pela IA</h3>
-                        <p>A organização arquitetônica de um projeto TypeScript é fundamental para a eficácia das ferramentas de IA. Uma estrutura clara permite que a IA analise, navegue e construa eficientemente um modelo preciso da base de código.</p>
-                        <h4>Monorepos para Contexto de IA Aprimorado:</h4>
-                        <p>Os monorepositórios (monorepos), geridos por ferramentas como Nx, oferecem uma visão unificada de projetos relacionados. Esta colocalização pode ajudar a IA a compreender as interdependências mais facilmente. As <code>project references</code> do TypeScript dentro de um monorepo permitem que o compilador trate cada pacote como uma unidade isolada, ao mesmo tempo que compreende as suas relações.</p>
-                        <h4>Limites Claros e Organização Modular:</h4>
-                        <p>A definição de limites explícitos entre diferentes partes da aplicação (por exemplo, módulos de funcionalidades no Angular, módulos específicos de domínio no NestJS) é crucial. Esta modularidade ajuda a IA a limitar o âmbito da sua análise.</p>
-        
-                        <h3>B. O Papel Crucial da Documentação na Orientação da IA</h3>
-                        <p>A documentação abrangente e bem estruturada já não é um artefacto passivo para consumo humano, mas sim uma entrada ativa e crítica para que os sistemas de IA compreendam a intenção do projeto, convenções, APIs e funcionalidades específicas.</p>
-                        <h4>1. Criar READMEs e <code>CONTRIBUTING.md</code> Amigáveis à IA</h4>
-                        <p>Os ficheiros README.md devem articular claramente o propósito, arquitetura e fluxo de trabalho. Os ficheiros <code>CONTRIBUTING.md</code> devem detalhar padrões de codificação e práticas preferidas.</p>
-                        <h4>2. Aproveitar JSDoc/TSDoc para Melhor Compreensão Semântica pela IA</h4>
-                        <p>Comentários JSDoc/TSDoc fornecem detalhes semânticos detalhados sobre elementos de código. Código bem documentado leva a uma melhor compreensão pela IA.</p>
-                        
-                        <h4>Tabela 1: Tags JSDoc/TSDoc Chave para Contexto de IA</h4>
-                        <table>
-                            <thead><tr><th>Tag</th><th>Propósito</th><th>Como Ajuda na Compreensão da IA</th></tr></thead>
-                            <tbody>
-                                <tr><td><code>@param {type} nome - descrição</code></td><td>Descreve um parâmetro de função, o seu tipo e significado.</td><td>Ajuda a IA a gerar argumentos com o tipo correto, compreender o fluxo de dados e corresponder chamadas de função a definições.</td></tr>
-                                <tr><td><code>@returns {type} - descrição</code></td><td>Descreve o valor de retorno de uma função e o seu tipo.</td><td>Permite à IA prever o tipo de dados esperado de uma função, auxiliando na composição e verificação de tipos.</td></tr>
-                                <tr><td><code>@remarks explicação</code></td><td>Fornece uma explicação mais detalhada ou notas sobre a função/classe.</td><td>Oferece contexto adicional à IA sobre a lógica, casos de uso ou decisões de design por detrás do código.</td></tr>
-                                <tr><td><code>@example snippet_de_código</code></td><td>Mostra um exemplo de como usar a função ou classe.</td><td>Fornece à IA um padrão concreto de uso, melhorando a sua capacidade de gerar código de invocação correto ou testes.</td></tr>
-                                 <tr><td><code>@deprecated mensagem</code></td><td>Indica que um elemento de código está obsoleto e fornece uma mensagem.</td><td>Informa a IA para evitar o uso deste elemento em novo código e pode sugerir alternativas se fornecidas.</td></tr>
-                                <tr><td><code>@see ligação_ou_símbolo</code></td><td>Remete para documentação ou código relacionado.</td><td>Ajuda a IA a encontrar e correlacionar informação relacionada, melhorando a sua compreensão do contexto mais amplo do código.</td></tr>
-                            </tbody>
-                        </table>
-        
-                        <h3>C. Estabelecer Padrões de Codificação (ESLint, Prettier)</h3>
-                        <p>Padrões de codificação consistentes (impostos por linters como ESLint e formatadores como Prettier) criam uma estrutura de base de código previsível, que é mais fácil para a IA aprender e gerar código.</p>
-                    </div>
-                </section>
+      <article class="card">
+        <h2>Dia 3 • Dijon</h2>
+        <ul>
+          <li>Trem Paris → Dijon — <strong>R$ 115</strong></li>
+          <li>Trilha da Corujinha (mapa) — <strong>R$ 26</strong></li>
+          <li>Hospedagem: B&B Hôtel Centro — <strong>R$ 544</strong></li>
+          <li>Degustação Côte‑de‑Nuits — <strong>R$ 96</strong></li>
+        </ul>
+      </article>
 
-                <section id="ides" class="content-section">
-                    <div class="topic-cover">
-                        <h2 class="topic-cover-title">II. Dominando IDEs (Cursor)</h2>
-                    </div>
-                    <div class="section-content-wrapper">
-                        <p>Esta seção foca-se especificamente no IDE Cursor, detalhando as suas funcionalidades de IA e como otimizar o seu uso para o desenvolvimento em TypeScript, Angular e NestJS. O Cursor é um IDE concebido primordialmente para IA, construído sobre o VS Code, e enriquecido com funcionalidades que visam integrar a IA profundamente no fluxo de trabalho de desenvolvimento.</p>
-                        <h3>A. Visão Geral das Funcionalidades de IA do Cursor</h3>
-                        <p>O Cursor oferece capacidades como Modo Agente para tarefas de ponta a ponta, conclusões de código sensíveis ao contexto, chat integrado com a base de código, edição/geração inline com Ctrl/Cmd+K, e inteligência específica para frameworks como Angular e NestJS.</p>
-                        <h4>Tabela 2: Comparação de Ferramentas de Assistência de Codificação por IA</h4>
-                        <table>
-                            <thead><tr><th>Ferramenta</th><th>Funcionalidades Chave de IA</th><th>Suporte Específico TS/Angular/NestJS</th></tr></thead>
-                            <tbody>
-                                <tr><td><strong>Cursor</strong></td><td>Modo Agente (YOLO), Conclusões Tab, Chat/Composer, Cmd+K, Inteligência de Framework, Depuração</td><td>Sim (Angular: validação template, decoradores, gen. comp/serv; NestJS: inteligência rota/middleware, decoradores)</td></tr>
-                                <tr><td><strong>Workik AI</strong></td><td>Geração de Código, Depuração, Otimização, Automação, Testes, Refatoração, Migração, Docs QA</td><td>Sim (Angular, Node.js/NestJS, Redux, RxJS)</td></tr>
-                                <tr><td><strong>GitHub Copilot</strong></td><td>Conclusão de Código, Chat, Geração de Docs, Refatoração, Revisão de Código</td><td>Geralmente bom com TS; pode ser guiado por comentários/instruções</td></tr>
-                                <tr><td><strong>Cody (Sourcegraph)</strong></td><td>Chat orientado por IA, autocompletar, edição inline, compreensão de toda a base de código</td><td>Suporte geral a TS</td></tr>
-                                 <tr><td><strong>Tabnine</strong></td><td>Conclusão de Código, Chat, Geração de Testes, Geração de Docs, Refatoração</td><td>Suporte geral a TS; pode ser treinado em código específico</td></tr>
-                            </tbody>
-                        </table>
-                        <h3>B. Maximizando a Eficácia da IA: Provisionamento Avançado de Contexto no Cursor</h3>
-                        <p>Para que o Cursor forneça sugestões úteis, é crucial alimentá-lo com contexto relevante. Utilize menções <code>@code</code>, <code>@file</code>, <code>@folder</code>, e <code>@Docs</code> para fornecer contexto cirúrgico.</p>
-                        <h4>Regras do Cursor (ficheiros <code>.mdc</code>)</h4>
-                        <p>As Regras do Cursor são instruções persistentes e específicas do projeto para a IA, armazenadas em ficheiros <code>.mdc</code>. Exemplo de regra para NestJS:</p>
-                        <pre><code>---
-description: Guia NestJS para melhores práticas.
-globs: ["*.ts"]
-alwaysApply: true
----
-# NestJS Development Guidelines
+      <article class="card">
+        <h2>Dia 4 • Lyon</h2>
+        <ul>
+          <li>Trem Dijon → Lyon — <strong>R$ 96</strong></li>
+          <li>Lyon City Card 24 h — <strong>R$ 186</strong></li>
+          <li>Hospedagem: Presqu’île — <strong>R$ 608</strong></li>
+        </ul>
+      </article>
 
-## Modules
-- Use \`forRoot\` e \`forFeature\` para configuração.
+      <article class="card">
+        <h2>Dia 5 • Avignon</h2>
+        <ul>
+          <li>Trem Lyon → Avignon — <strong>R$ 122</strong></li>
+          <li>Avignon City Pass 24 h — <strong>R$ 154</strong></li>
+          <li>Hospedagem: intra‑muros — <strong>R$ 608</strong></li>
+        </ul>
+      </article>
 
-## Component Architecture
-- Siga os princípios SOLID.
-- Use injeção de dependência (DI) extensivamente.</code></pre>
-                    </div>
-                </section>
+      <article class="card">
+        <h2>Dia 6 • Aix‑en‑Provence</h2>
+        <ul>
+          <li>Trem Avignon → Aix — <strong>R$ 102</strong></li>
+          <li>Tour vinícolas rosé — <strong>R$ 320</strong></li>
+          <li>Hospedagem: centro histórico — <strong>R$ 768</strong></li>
+        </ul>
+      </article>
 
-                <section id="geracao_codigo" class="content-section">
-                    <div class="topic-cover">
-                        <h2 class="topic-cover-title">III. Geração de Código</h2>
-                    </div>
-                    <div class="section-content-wrapper">
-                        <p>Esta seção detalha o "como fazer" da interação com a IA para geração de código, focando-se na engenharia de prompts e aplicações específicas em Angular e NestJS. A qualidade do código gerado pela IA é diretamente proporcional à qualidade dos prompts fornecidos.</p>
-                        <h3>A. A Arte da Engenharia de Prompts para Código de Alta Qualidade</h3>
-                        <p>Dominar a engenharia de prompts é essencial. Seja explícito sobre a tarefa, framework, nomes de funções, comportamento esperado e formato de saída.</p>
-                        <h4>Tabela 3: Visão Geral das Técnicas de Engenharia de Prompts</h4>
-                        <table>
-                            <thead><tr><th>Técnica</th><th>Descrição</th><th>Exemplo de Caso de Uso</th></tr></thead>
-                            <tbody>
-                                <tr><td><strong>Zero-shot Prompting</strong></td><td>Fornecer uma tarefa ao LLM sem exemplos prévios.</td><td>"Gere uma função TypeScript para calcular o fatorial."</td></tr>
-                                <tr><td><strong>One-shot/Few-shot Prompting</strong></td><td>Fornecer um ou alguns exemplos de entrada/saída desejada.</td><td>"Dado: <code>// soma(a,b) => a+b</code>. Gere uma função de subtração."</td></tr>
-                                <tr><td><strong>Chain-of-Thought (CoT)</strong></td><td>Instruir o LLM a "pensar passo a passo".</td><td>"Qual é o output deste código NestJS? Pense passo a passo."</td></tr>
-                                <tr><td><strong>Prompt Chaining</strong></td><td>Dividir uma tarefa complexa numa sequência de prompts.</td><td>1. Gerar esquema. 2. Gerar serviço. 3. Gerar controlador.</td></tr>
-                            </tbody>
-                        </table>
-                        <h3>B. Desenvolvimento Frontend com IA: TypeScript e Angular</h3>
-                        <p>A IA pode gerar o scaffolding para componentes Angular, serviços, lógica NgRx e formulários reativos. Prompts eficazes devem especificar nomes, propósito, inputs, outputs e tipos.</p>
-                        <h3>C. Desenvolvimento Backend com IA: TypeScript e NestJS</h3>
-                        <p>No backend, a IA acelera a criação de módulos NestJS, controladores, serviços, DTOs, entidades TypeORM, resolvers GraphQL e configurações de microserviços/autenticação.</p>
-                    </div>
-                </section>
+      <article class="card">
+        <h2>Dia 7 • Cannes</h2>
+        <ul>
+          <li>Trem Aix → Cannes — <strong>R$ 160</strong></li>
+          <li>Barco Ilhas Lérins — <strong>R$ 118</strong></li>
+          <li>Hospedagem: centro — <strong>R$ 704</strong></li>
+        </ul>
+      </article>
 
-                <section id="qualidade_manutenibilidade" class="content-section">
-                    <div class="topic-cover">
-                        <h2 class="topic-cover-title">IV. Melhorar Qualidade</h2>
-                    </div>
-                    <div class="section-content-wrapper">
-                        <p>Esta seção explora como a IA pode ir além da geração inicial de código para auxiliar nas tarefas contínuas de garantir a qualidade, robustez e manutenibilidade do código, desde a criação de testes até a refatoração e revisão de código.</p>
-                        <h3>A. Estratégias de Teste Automatizado Potenciadas por IA</h3>
-                        <p>A IA pode gerar testes unitários para Angular (componentes, serviços, NgRx) e NestJS (unitários e E2E), reduzindo a barreira para escrever testes abrangentes.</p>
-                        <h3>B. Refatoração Inteligente de Código com IA</h3>
-                        <p>Ferramentas de IA podem analisar código e sugerir refatorações para aderir aos princípios SOLID e aplicar padrões de design GoF.</p>
-                        <h4>Tabela 4: Padrões de Design GoF Aplicáveis e Assistência de IA</h4>
-                        <table>
-                            <thead><tr><th>Padrão GoF</th><th>Descrição Breve</th><th>Como a IA Pode Ajudar</th></tr></thead>
-                            <tbody>
-                                <tr><td><strong>Singleton</strong></td><td>Garante que uma classe tenha apenas uma instância.</td><td>Identificar candidatos, gerar boilerplate.</td></tr>
-                                <tr><td><strong>Factory Method</strong></td><td>Define uma interface para criar um objeto, subclasses decidem a instância.</td><td>Sugerir uso, gerar estrutura da fábrica.</td></tr>
-                                <tr><td><strong>Adapter</strong></td><td>Permite que objetos com interfaces incompatíveis colaborem.</td><td>Gerar a classe Adapter.</td></tr>
-                                <tr><td><strong>Decorator</strong></td><td>Anexa novos comportamentos a objetos dinamicamente.</td><td>Gerar estrutura de decoradores personalizados.</td></tr>
-                                <tr><td><strong>Observer</strong></td><td>Define um mecanismo de subscrição para notificar objetos sobre eventos.</td><td>Ajudar a implementar com RxJS (Subjects/Observables).</td></tr>
-                                <tr><td><strong>Strategy</strong></td><td>Define uma família de algoritmos e torna-os intercambiáveis.</td><td>Identificar lógica condicional, gerar interfaces e classes de estratégia.</td></tr>
-                            </tbody>
-                        </table>
-                        <h3>C. Revisão de Código Orientada por IA e Análise Arquitetónica</h3>
-                        <p>A IA expande a revisão de código para detetar bugs, vulnerabilidades, gargalos de desempenho e avaliar conformidade arquitetónica.</p>
-                    </div>
-                </section>
+      <article class="card">
+        <h2>Dias 8‑9 • Nice</h2>
+        <ul>
+          <li>Trem Cannes → Nice — <strong>R$ 58</strong></li>
+          <li>Riviera Pass 24 h — <strong>R$ 192</strong></li>
+          <li>Hospedagem: Promenade — <strong>R$ 768</strong></li>
+        </ul>
+      </article>
+    </section>
 
-                <section id="melhores_praticas" class="content-section">
-                    <div class="topic-cover">
-                        <h2 class="topic-cover-title">V. Melhores Práticas e Futuro</h2>
-                    </div>
-                    <div class="section-content-wrapper">
-                        <p>Esta seção final resume as principais melhores práticas para trabalhar com IA no desenvolvimento de software e oferece uma perspectiva sobre a evolução contínua dessas tecnologias e seu impacto futuro.</p>
-                        <h3>A. O Imperativo Humano-no-Ciclo</h3>
-                        <p>A IA é um assistente poderoso, não um substituto. Pensamento crítico, resolução de problemas e decisões arquitetónicas permanecem responsabilidades humanas. Sempre revise e valide o código gerado por IA.</p>
-                        <h3>B. Cultivar uma Mentalidade de Aprendizagem</h3>
-                        <p>As ferramentas e capacidades de IA estão evoluindo rapidamente. Os programadores precisam aprender e adaptar continuamente seus fluxos de trabalho e experimentar novas funcionalidades.</p>
-                        <h3>C. IA Responsável: Considerações Éticas</h3>
-                        <p>Esteja atento à privacidade e segurança dos dados, potenciais vieses nos modelos de IA e implicações na propriedade do código e propriedade intelectual.</p>
-                    </div>
-                </section>
+    <section class="card">
+      <h2>Estimativa de custos <small>(por pessoa)</small></h2>
+      <div class="table-wrapper">
+        <table>
+          <tbody>
+            <tr><th>Aéreo GRU‑CDG‑GRU</th><td>R$ 5 760</td></tr>
+            <tr><th>Trens (6 trechos)</th><td>R$ 672</td></tr>
+            <tr><th>Hospedagem (8 noites)</th><td>R$ 3 059</td></tr>
+            <tr><th>Passes &amp; passeios</th><td>R$ 1 331</td></tr>
+            <tr><th>Alimentação (R$ 480/dia)</th><td>R$ 4 320</td></tr>
+            <tr><th><strong>Total aprox.</strong></th><td><strong>R$ 15 136</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
 
-                <section id="conclusao" class="content-section">
-                    <div class="topic-cover">
-                        <h2 class="topic-cover-title">VI. Conclusão</h2>
-                    </div>
-                    <div class="section-content-wrapper">
-                        <p>A integração da Inteligência Artificial no desenvolvimento de software frontend e backend, utilizando TypeScript com Angular e NestJS, apresenta uma oportunidade transformadora. A chave reside numa abordagem estratégica que combina estruturação meticulosa do projeto, documentação orientada para IA e o domínio da engenharia de prompts, especialmente ao utilizar IDEs avançados como o Cursor.</p>
-                        <p>Estabelecer uma base sólida, dominar o provisionamento de contexto e a engenharia de prompts são cruciais. A IA oferece valor imenso na geração de código, testes, refatoração e documentação. No entanto, o paradigma mais produtivo é aquele em que a IA atua como um assistente poderoso, mas onde a especialização, o pensamento crítico e a supervisão do programador permanecem centrais. A trajetória futura aponta para uma sinergia ainda maior, onde a IA se torna um parceiro mais proativo no ciclo de vida do desenvolvimento.</p>
-                    </div>
-                </section>
-                
-                <section id="grafico_impacto" class="content-section">
-                    <div class="topic-cover">
-                        <h2 class="topic-cover-title">Gráfico de Impacto da IA</h2>
-                    </div>
-                    <div class="section-content-wrapper">
-                        <p>Este gráfico ilustra o impacto potencial da IA em diferentes fases do ciclo de vida de desenvolvimento de software, com base na capacidade da IA de automatizar tarefas, gerar código e fornecer insights. Os valores são conceituais e servem para fins ilustrativos.</p>
-                        <div class="chart-container">
-                            <canvas id="impactChart"></canvas>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </main>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const navLinks = document.querySelectorAll('.nav-link');
-            const contentSections = document.querySelectorAll('.content-section');
-            const sidebar = document.getElementById('sidebar');
-            const menuButton = document.getElementById('menuButton');
-            const mainContentArea = document.querySelector('.content-area-wrapper'); // For scrolling
-
-            let currentActiveSection = document.querySelector('.content-section.active');
-
-            function setActiveSection(sectionId, skipAnimation) {
-                const newActiveSection = document.getElementById(sectionId);
-                if (!newActiveSection || (newActiveSection === currentActiveSection && !skipAnimation)) return;
-
-                navLinks.forEach(link => {
-                    link.classList.toggle('active', link.dataset.section === sectionId);
-                });
-
-                function switchSections() {
-                    if (currentActiveSection && currentActiveSection !== newActiveSection) {
-                        currentActiveSection.classList.remove('active');
-                        currentActiveSection.classList.add('is-exiting');
-                        
-                        currentActiveSection.addEventListener('transitionend', function handler(event) {
-                            if (event.propertyName !== 'opacity') return; // Ensure it's the opacity transition
-                            this.style.display = 'none';
-                            this.classList.remove('is-exiting');
-                            this.removeEventListener('transitionend', handler);
-                        }, { once: true }); // Use once: true for automatic removal
-                    }
-                    
-                    newActiveSection.style.display = 'block';
-                    // Force reflow to ensure transition plays if display was none
-                    void newActiveSection.offsetWidth; 
-                    newActiveSection.classList.add('active');
-                    
-                    currentActiveSection = newActiveSection;
-                    if (mainContentArea) mainContentArea.scrollTop = 0;
-                }
-
-                if (skipAnimation && currentActiveSection) {
-                     currentActiveSection.style.display = 'none';
-                     currentActiveSection.classList.remove('active');
-                     newActiveSection.style.display = 'block';
-                     newActiveSection.classList.add('active');
-                     currentActiveSection = newActiveSection;
-                     if (mainContentArea) mainContentArea.scrollTop = 0;
-                } else {
-                    // Standard animated switch
-                    // If currentActiveSection is already exiting, wait for it to finish before starting new one
-                    if (currentActiveSection && currentActiveSection.classList.contains('is-exiting')) {
-                         // This case needs careful handling to avoid race conditions or rely on timeouts.
-                         // For simplicity, we'll allow overlap or a slight delay.
-                         // A more robust solution might queue section changes.
-                         setTimeout(switchSections, 50); // Small delay if another is exiting
-                    } else {
-                        switchSections();
-                    }
-                }
-            }
-
-            navLinks.forEach(link => {
-                link.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    const sectionId = this.dataset.section;
-                    setActiveSection(sectionId, false);
-                    window.location.hash = sectionId;
-
-                    if (window.innerWidth < 768 && sidebar.classList.contains('open')) {
-                        sidebar.classList.remove('open');
-                    }
-                });
-            });
-
-            menuButton.addEventListener('click', function() {
-                sidebar.classList.toggle('open');
-            });
-            
-            document.addEventListener('click', function(event) {
-                if (window.innerWidth < 768 && sidebar.classList.contains('open')) {
-                    const isClickInsideSidebar = sidebar.contains(event.target);
-                    const isClickOnMenuButton = menuButton.contains(event.target);
-                    if (!isClickInsideSidebar && !isClickOnMenuButton) {
-                        sidebar.classList.remove('open');
-                    }
-                }
-            });
-
-            const initialSectionId = window.location.hash.substring(1) || 'fundamentos';
-            setActiveSection(initialSectionId, true); // Skip animation for initial load
-
-            const impactCtx = document.getElementById('impactChart').getContext('2d');
-            if (impactCtx) {
-                new Chart(impactCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Geração de Código (Boilerplate)', 'Testes Unitários', 'Documentação', 'Refatoração', 'Análise de Segurança', 'Otimização de Performance'],
-                        datasets: [{
-                            label: 'Impacto Estimado da IA (%)',
-                            data: [70, 50, 60, 40, 45, 35],
-                            backgroundColor: 'rgba(59, 130, 246, 0.7)', // bg-blue-500 with opacity
-                            borderColor: 'rgba(59, 130, 246, 1)', // bg-blue-500
-                            borderWidth: 1,
-                            borderRadius: 4,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true, max: 100,
-                                title: { display: true, text: 'Aumento de Produtividade (%)', font: {size: 14, family: 'Inter'}, color: '#475569'},
-                                grid: { color: '#e5e7eb' },
-                                ticks: { color: '#475569', font: {family: 'Inter'} }
-                            },
-                            x: {
-                                title: { display: true, text: 'Etapas do Desenvolvimento', font: {size: 14, family: 'Inter'}, color: '#475569' },
-                                grid: { display: false },
-                                ticks: { color: '#475569', font: {family: 'Inter'}, autoSkip: false, maxRotation: 30, minRotation: 30 }
-                            }
-                        },
-                        plugins: {
-                            legend: { display: true, position: 'top', labels: { font: {size: 12, family: 'Inter'}, color: '#475569'} },
-                            tooltip: {
-                                backgroundColor: '#1e293b', titleFont: {family: 'Inter'}, bodyFont: {family: 'Inter'},
-                                callbacks: {
-                                    label: function(context) {
-                                        let label = context.dataset.label || '';
-                                        if (label) { label += ': '; }
-                                        if (context.parsed.y !== null) { label += context.parsed.y + '%'; }
-                                        return label;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-        });
-    </script>
+    <section class="card">
+      <h2>Dicas finais</h2>
+      <ul>
+        <li>Reserve bilhetes de trem com 3‑4 meses de antecedência.</li>
+        <li>Opte por hotéis com cancelamento gratuito — preços disparam em grandes eventos.</li>
+        <li>Viaje leve: deslocamentos a pé a partir das estações centrais.</li>
+        <li>Aproveite menus <em>prix‑fixe</em> no almoço por R$ 130‑160.</li>
+      </ul>
+    </section>
+  </main>
+  <footer>
+    Valores convertidos com taxa média de 1 € = R$ 6,40 (referência Banco Central/ECB, 16 jun 2025). Preços são estimativas para baixa/média temporada 2025.
+  </footer>
 </body>
 </html>
