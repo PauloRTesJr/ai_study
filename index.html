@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Roteiro Paris → Nice (9 dias)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,212 +12,204 @@
       --accent: #ff385c;
       --dark: #222;
       --light: #fafafa;
-      --max-width: 1100px;
+      --radius: 14px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    /* Reset & base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: "Inter", Arial, sans-serif;
       background: var(--light);
       color: var(--dark);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      padding-bottom: 5rem; /* avoid footer overlap on mobile */
     }
 
+    /* Header */
     header {
       background: #fff;
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 10;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
     }
+    .wrapper { max-width: 100%; padding: 1rem 1.2rem; }
+    h1 { font-size: 1.35rem; font-weight: 600; color: var(--accent); }
 
-    .wrapper {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 1rem 1.25rem;
-    }
-
-    h1 {
-      font-size: 1.45rem;
-      font-weight: 600;
-      color: var(--accent);
-      letter-spacing: -0.5px;
-    }
-
+    /* Layout */
     .container {
-      max-width: var(--max-width);
+      max-width: 860px;
       margin: 0 auto;
-      padding: 1.5rem 1rem;
-      display: grid;
-      gap: 1.5rem;
+      padding: 1.2rem .8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
     }
 
+    /* Card */
     .card {
       background: #fff;
-      border-radius: 16px;
-      padding: 1.5rem 1.25rem;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      animation: fadeUp 0.6s ease both;
+      border-radius: var(--radius);
+      padding: 1.3rem 1.1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,.05);
+      animation: fadeUp .6s ease both;
+      transition: transform .25s ease;
+    }
+    .card:hover { transform: translateY(-2px); }
+    .card:nth-of-type(even){ animation-delay:.1s; }
+
+    h2 { font-size: 1.1rem; color: var(--accent); margin-bottom:.65rem; }
+    p,li,td,th { font-size:.95rem; }
+
+    /* Responsive Table (stack on mobile) */
+    .table-wrapper { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    table{ width:100%; border-collapse:collapse; }
+    th,td{ padding:.65rem .55rem; border:1px solid #eee; text-align:left; }
+    th{ background:#f4f4f4; font-weight:600; }
+
+    @media(max-width:540px){
+      table thead{ display:none; }
+      table,tbody,tr,td{ display:block; width:100%; }
+      tr{ margin-bottom:1rem; background:#fff; border:1px solid #eee; border-radius:var(--radius); box-shadow:0 1px 4px rgba(0,0,0,.04); padding:.5rem .6rem; }
+      td{ border:none; position:relative; padding-left:46%; }
+      td::before{
+        content: attr(data-label);
+        position:absolute; left:.6rem; top:.55rem; font-weight:600; color:#555; width:42%; white-space:nowrap;
+      }
     }
 
-    .card:nth-child(odd) { animation-delay: 0.05s; }
-    .card:nth-child(even) { animation-delay: 0.15s; }
-
-    h2 {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 0.75rem;
-      color: var(--accent);
+    /* Two‑column only on wider screens */
+    @media(min-width:768px){
+      .two-col{ display:grid; grid-template-columns:repeat(2,1fr); gap:1.2rem; }
     }
 
-    p, li, td, th { font-size: 0.96rem; }
+    /* Fade animation */
+    @keyframes fadeUp{ from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);} }
 
-    .table-wrapper {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
+    ul{ list-style:disc; margin-left:1.2rem; }
+    li+li{ margin-top:.35rem; }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.9rem;
-    }
-
-    th, td {
-      padding: 0.7rem 0.6rem;
-      border: 1px solid #eee;
-      text-align: left;
-    }
-
-    th {
-      background: #f1f1f1;
-      font-weight: 600;
-    }
-
-    ul { list-style-type: disc; margin-left: 1.2rem; }
-    li + li { margin-top: 0.4rem; }
-
-    footer {
-      text-align: center;
-      font-size: 0.8rem;
-      color: #666;
-      padding: 2rem 1rem 3rem;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Medium screens */
-    @media (min-width: 600px) {
-      .two-col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    footer{
+      position:fixed; bottom:0; left:0; width:100%; background:#fff; color:#666; font-size:.78rem; text-align:center; padding:.9rem .5rem; box-shadow:0 -2px 6px rgba(0,0,0,.04);
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="wrapper"><h1>Roteiro Paris → Nice • 9 dias</h1></div>
-  </header>
+  <header><div class="wrapper"><h1>Roteiro Paris → Nice • 9 dias</h1></div></header>
+
   <main class="container">
     <section class="card">
-      <p><strong>Resumo:</strong> Em nove dias é possível cruzar a França de norte a sul, partindo de Paris e chegando a Nice, combinando grandes ícones culturais com cidades menos óbvias como Dijon, Lyon, Avignon e Aix‑en‑Provence, sempre de trem para evitar estresse com carro. Para dois casais, o orçamento estimado fica em torno de <strong>R$ 60&nbsp;544</strong> no total (≈ R$ 15&nbsp;136 por pessoa) — valores convertidos a partir de € 1 = R$ 6,40 (jun/2025).</p>
+      <p><strong>Resumo:</strong> Em nove dias é possível cruzar a França de norte a sul, partindo de Paris e chegando a Nice, combinando grandes ícones culturais com cidades menos óbvias como Dijon, Lyon, Avignon e Aix‑en‑Provence, sempre de trem para evitar estresse com carro. Para dois casais, o orçamento estimado fica em torno de <strong>R$ 60 544</strong> no total (≈ R$ 15 136 por pessoa) — valores convertidos a partir de € 1 = R$ 6,40 (jun/2025).</p>
     </section>
 
+    <!-- Visão Geral -->
     <section class="card">
       <h2>Visão geral do roteiro</h2>
       <div class="table-wrapper">
         <table>
           <thead>
-            <tr><th>Dia</th><th>Cidade‑base</th><th>Deslocamento</th><th>Destaques</th><th>Motivo da parada</th></tr>
+            <tr><th>Dia</th><th>Cidade‑base</th><th>Deslocamento</th><th>Destaques</th><th>Motivo</th></tr>
           </thead>
           <tbody>
-            <tr><td>0</td><td>Voo</td><td>São Paulo → Paris (12 h)</td><td>—</td><td>Chegada matutina ao CDG</td></tr>
-            <tr><td>1‑2</td><td>Paris</td><td>—</td><td>Louvre, Torre Eiffel, Montmartre, cruzeiro Sena</td><td>Porta de entrada e ícones mundiais</td></tr>
-            <tr><td>3</td><td>Dijon</td><td>TGV 1 h 35</td><td>Trilha da Corujinha, degustação mostarda & vinhos</td><td>Gastronomia borgonhesa</td></tr>
-            <tr><td>4</td><td>Lyon</td><td>TER 2 h</td><td>Vieux‑Lyon, Fourvière, Halles Bocuse</td><td>Capital gastronômica</td></tr>
-            <tr><td>5</td><td>Avignon</td><td>TGV 1 h 10</td><td>Palais des Papes, Pont d’Avignon</td><td>Cidade papal medieval</td></tr>
-            <tr><td>6</td><td>Aix‑en‑Provence</td><td>TGV 0 h 20</td><td>Atelier Cézanne, Cours Mirabeau, tour rosé</td><td>Charme provençal & arte</td></tr>
-            <tr><td>7</td><td>Cannes</td><td>TGV 2 h</td><td>Ilhas Lérins, Croisette</td><td>Balneário glamouroso</td></tr>
-            <tr><td>8‑9</td><td>Nice</td><td>TER 0 h 30</td><td>Vieux Nice, Promenade des Anglais</td><td>Base na Côte d’Azur</td></tr>
+            <tr>
+              <td data-label="Dia">0</td><td data-label="Cidade‑base">Voo</td><td data-label="Deslocamento">São Paulo → Paris (12 h)</td><td data-label="Destaques">—</td><td data-label="Motivo">Chegada ao CDG</td>
+            </tr>
+            <tr>
+              <td data-label="Dia">1‑2</td><td data-label="Cidade‑base">Paris</td><td data-label="Deslocamento">—</td><td data-label="Destaques">Louvre, Torre Eiffel, Montmartre, Sena</td><td data-label="Motivo">Ícones mundiais</td>
+            </tr>
+            <tr>
+              <td data-label="Dia">3</td><td data-label="Cidade‑base">Dijon</td><td data-label="Deslocamento">TGV 1 h 35</td><td data-label="Destaques">Trilha Corujinha, mostarda & vinhos</td><td data-label="Motivo">Gastronomia borgonhesa</td>
+            </tr>
+            <tr>
+              <td data-label="Dia">4</td><td data-label="Cidade‑base">Lyon</td><td data-label="Deslocamento">TER 2 h</td><td data-label="Destaques">Vieux‑Lyon, Fourvière</td><td data-label="Motivo">Capital gastronômica</td>
+            </tr>
+            <tr>
+              <td data-label="Dia">5</td><td data-label="Cidade‑base">Avignon</td><td data-label="Deslocamento">TGV 1 h 10</td><td data-label="Destaques">Palais des Papes, Pont</td><td data-label="Motivo">Cidade papal</td>
+            </tr>
+            <tr>
+              <td data-label="Dia">6</td><td data-label="Cidade‑base">Aix‑en‑Provence</td><td data-label="Deslocamento">TGV 0 h 20</td><td data-label="Destaques">Atelier Cézanne, tour rosé</td><td data-label="Motivo">Charme provençal</td>
+            </tr>
+            <tr>
+              <td data-label="Dia">7</td><td data-label="Cidade‑base">Cannes</td><td data-label="Deslocamento">TGV 2 h</td><td data-label="Destaques">Ilhas Lérins, Croisette</td><td data-label="Motivo">Balneário glamour</td>
+            </tr>
+            <tr>
+              <td data-label="Dia">8‑9</td><td data-label="Cidade‑base">Nice</td><td data-label="Deslocamento">TER 0 h 30</td><td data-label="Destaques">Vieux Nice, Promenade</td><td data-label="Motivo">Côte d’Azur</td>
+            </tr>
           </tbody>
         </table>
       </div>
     </section>
 
+    <!-- Detalhado -->
     <section class="two-col">
       <article class="card">
         <h2>Dias 1‑2 • Paris</h2>
         <ul>
-          <li>Passe: Paris Museum Pass 2 d — <strong>R$ 333</strong></li>
-          <li>Transporte (metrô 10 viagens) — <strong>R$ 127</strong></li>
-          <li>Hospedagem: Hotel 3★ Saint‑Germain — <strong>R$ 1 024/quarto</strong></li>
-          <li>Por quê: Aclimatar-se ao fuso e ver clássicos</li>
+          <li>Passe: Museum Pass 2 d — <strong>R$ 333</strong></li>
+          <li>Metrô (10 viagens) — <strong>R$ 127</strong></li>
+          <li>Hospedagem 3★ — <strong>R$ 1 024/quarto</strong></li>
+          <li>Atrativos clássicos + aclimatação</li>
         </ul>
       </article>
 
       <article class="card">
         <h2>Dia 3 • Dijon</h2>
         <ul>
-          <li>Trem Paris → Dijon — <strong>R$ 115</strong></li>
-          <li>Trilha da Corujinha (mapa) — <strong>R$ 26</strong></li>
-          <li>Hospedagem: B&B Hôtel Centro — <strong>R$ 544</strong></li>
-          <li>Degustação Côte‑de‑Nuits — <strong>R$ 96</strong></li>
+          <li>Trem — <strong>R$ 115</strong></li>
+          <li>Trilha Corujinha — <strong>R$ 26</strong></li>
+          <li>Hospedagem — <strong>R$ 544</strong></li>
+          <li>Degustação vinhos — <strong>R$ 96</strong></li>
         </ul>
       </article>
 
       <article class="card">
         <h2>Dia 4 • Lyon</h2>
         <ul>
-          <li>Trem Dijon → Lyon — <strong>R$ 96</strong></li>
-          <li>Lyon City Card 24 h — <strong>R$ 186</strong></li>
-          <li>Hospedagem: Presqu’île — <strong>R$ 608</strong></li>
+          <li>Trem — <strong>R$ 96</strong></li>
+          <li>City Card 24 h — <strong>R$ 186</strong></li>
+          <li>Hospedagem — <strong>R$ 608</strong></li>
         </ul>
       </article>
 
       <article class="card">
         <h2>Dia 5 • Avignon</h2>
         <ul>
-          <li>Trem Lyon → Avignon — <strong>R$ 122</strong></li>
-          <li>Avignon City Pass 24 h — <strong>R$ 154</strong></li>
-          <li>Hospedagem: intra‑muros — <strong>R$ 608</strong></li>
+          <li>Trem — <strong>R$ 122</strong></li>
+          <li>City Pass 24 h — <strong>R$ 154</strong></li>
+          <li>Hospedagem — <strong>R$ 608</strong></li>
         </ul>
       </article>
 
       <article class="card">
         <h2>Dia 6 • Aix‑en‑Provence</h2>
         <ul>
-          <li>Trem Avignon → Aix — <strong>R$ 102</strong></li>
-          <li>Tour vinícolas rosé — <strong>R$ 320</strong></li>
-          <li>Hospedagem: centro histórico — <strong>R$ 768</strong></li>
+          <li>Trem — <strong>R$ 102</strong></li>
+          <li>Tour rosé — <strong>R$ 320</strong></li>
+          <li>Hospedagem — <strong>R$ 768</strong></li>
         </ul>
       </article>
 
       <article class="card">
         <h2>Dia 7 • Cannes</h2>
         <ul>
-          <li>Trem Aix → Cannes — <strong>R$ 160</strong></li>
-          <li>Barco Ilhas Lérins — <strong>R$ 118</strong></li>
-          <li>Hospedagem: centro — <strong>R$ 704</strong></li>
+          <li>Trem — <strong>R$ 160</strong></li>
+          <li>Barco Ilhas Lérins — <strong>R$ 118</strong></li>
+          <li>Hospedagem — <strong>R$ 704</strong></li>
         </ul>
       </article>
 
       <article class="card">
         <h2>Dias 8‑9 • Nice</h2>
         <ul>
-          <li>Trem Cannes → Nice — <strong>R$ 58</strong></li>
+          <li>Trem — <strong>R$ 58</strong></li>
           <li>Riviera Pass 24 h — <strong>R$ 192</strong></li>
-          <li>Hospedagem: Promenade — <strong>R$ 768</strong></li>
+          <li>Hospedagem — <strong>R$ 768</strong></li>
         </ul>
       </article>
     </section>
 
+    <!-- Custos -->
     <section class="card">
       <h2>Estimativa de custos <small>(por pessoa)</small></h2>
       <div class="table-wrapper">
@@ -226,7 +218,7 @@
             <tr><th>Aéreo GRU‑CDG‑GRU</th><td>R$ 5 760</td></tr>
             <tr><th>Trens (6 trechos)</th><td>R$ 672</td></tr>
             <tr><th>Hospedagem (8 noites)</th><td>R$ 3 059</td></tr>
-            <tr><th>Passes &amp; passeios</th><td>R$ 1 331</td></tr>
+            <tr><th>Passes & passeios</th><td>R$ 1 331</td></tr>
             <tr><th>Alimentação (R$ 480/dia)</th><td>R$ 4 320</td></tr>
             <tr><th><strong>Total aprox.</strong></th><td><strong>R$ 15 136</strong></td></tr>
           </tbody>
@@ -234,18 +226,20 @@
       </div>
     </section>
 
+    <!-- Dicas -->
     <section class="card">
       <h2>Dicas finais</h2>
       <ul>
-        <li>Reserve bilhetes de trem com 3‑4 meses de antecedência.</li>
-        <li>Opte por hotéis com cancelamento gratuito — preços disparam em grandes eventos.</li>
-        <li>Viaje leve: deslocamentos a pé a partir das estações centrais.</li>
-        <li>Aproveite menus <em>prix‑fixe</em> no almoço por R$ 130‑160.</li>
+        <li>Reserve trens com 3‑4 meses de antecedência.</li>
+        <li>Hospedagens canceláveis ajudam a lidar com oscilação de preços.</li>
+        <li>Viaje leve: deslocamentos a pé partindo das estações centrais.</li>
+        <li>Menus <em>prix‑fixe</em> no almoço por R$ 130‑160.</li>
       </ul>
     </section>
   </main>
+
   <footer>
-    Valores convertidos com taxa média de 1 € = R$ 6,40 (referência Banco Central/ECB, 16 jun 2025). Preços são estimativas para baixa/média temporada 2025.
+    Conversão € 1 = R$ 6,40 • referências de preços para baixa/média temporada 2025 (16 jun 2025).
   </footer>
 </body>
 </html>
